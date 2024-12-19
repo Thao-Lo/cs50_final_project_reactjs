@@ -1,30 +1,20 @@
-import { Box, filledInputClasses, FormControl, FormHelperText, IconButton, Input, InputAdornment, inputBaseClasses, InputLabel, TextField } from "@mui/material";
+import { Box, Button, filledInputClasses, FormControl, FormHelperText, IconButton, Input, InputAdornment, inputBaseClasses, InputLabel, TextField } from "@mui/material";
 import { useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 
-
-function RegistrationForm() {
-    const [authentication, setAuthentication] = useState({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    })
-    const [isLoading, setIsLoading] = useState(false);
+function RegisterForm() {
     const [showPassword, setShowPassword] = useState({
-        password : false,
+        password: false,
         confirmPassword: false
 
-});
+    });
     const handleClickShowPassword = (field) => {
-
         setShowPassword((prev) => ({
             ...prev,
             [field]: !prev[field]
         }));
-
     }
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
@@ -35,52 +25,40 @@ function RegistrationForm() {
     };
     return (
         <Box component="form"
-            sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '20rem',
+                m: 2,
+                '& .MuiTextField-root': { m: 1, width: '100%' }
+            }}
             noValidate
             autoComplete="off">
+
+            <Box sx={{ fontSize: '1.5rem', fontWeight: 'bold', mb: 1 }}>
+                Register New User
+            </Box>
             <TextField
-                id="username-input"
+                id="register-username-input"
                 label="Username"
                 type="text"
                 variant="standard"
+                helperText="Incorrect entry."
             />
             <TextField
-                id="email-input"
+                id="register-email-input"
                 label="Email"
                 type="email"
                 variant="standard"
-                slotProps={{
-                    htmlInput: {
-                        sx: { textAlign: 'right' },
-                    },
-                    input: {
-                        endAdornment: (
-                            <InputAdornment
-                                position="end"
-                                sx={{
-                                    alignSelf: 'flex-end',
-                                    opacity: 0,
-                                    pointerEvents: 'none',
-                                    [`.${filledInputClasses.root} &`]: {
-                                        marginBottom: '7.5px',
-                                    },
-                                    [`[data-shrink=true] ~ .${inputBaseClasses.root} > &`]: {
-                                        opacity: 1,
-                                    },
-                                }}
-                            >
-                                @gmail.com
-                            </InputAdornment>
-                        ),
-                    },
-                }}
+                helperText="Incorrect entry."
             />
             <TextField
-                id="password-input"
+                id="register-password-input"
                 label="Password"
                 type={showPassword.password ? 'text' : 'password'}
                 autoComplete="current-password"
                 variant="standard"
+                helperText="Incorrect entry."
                 slotProps={{
                     htmlInput: {
                         sx: { textAlign: 'right' },
@@ -96,7 +74,7 @@ function RegistrationForm() {
                                     onMouseDown={handleMouseDownPassword}
                                     onMouseUp={handleMouseUpPassword}
                                 >
-                                    {showPassword.password ? <VisibilityOff /> : <Visibility />}
+                                    {showPassword.password ? <Visibility /> : <VisibilityOff />}
                                 </IconButton>
                             </InputAdornment>
                         )
@@ -104,11 +82,12 @@ function RegistrationForm() {
                 }}
             />
             <TextField
-                id="confirm-password-input"
+                id="register-confirm-password-input"
                 label="Confirm Password"
                 type={showPassword.confirmPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 variant="standard"
+                helperText="Incorrect entry."
                 slotProps={{
                     htmlInput: {
                         sx: { textAlign: 'right' },
@@ -124,16 +103,26 @@ function RegistrationForm() {
                                     onMouseDown={handleMouseDownPassword}
                                     onMouseUp={handleMouseUpPassword}
                                 >
-                                    {showPassword.confirmPassword ? <VisibilityOff /> : <Visibility />}
+                                    {showPassword.confirmPassword ? <Visibility /> : <VisibilityOff />}
                                 </IconButton>
                             </InputAdornment>
                         )
                     }
                 }}
             />
+            <Box sx={{ mt: 2 }}>
+                <Button variant="contained" type="submit" sx={{ width: '100%' }}>
+                    Register
+                </Button>
+            </Box>
 
         </Box>
+
     )
 }
 
-export default RegistrationForm;
+export default RegisterForm;
+
+//Registration Form
+// RegistrationPage
+//authService -> RegisterUser LoginUser
