@@ -29,6 +29,7 @@ function RegisterPage() {
         } else {
             console.log("register done");
         }
+        
 
     }
 
