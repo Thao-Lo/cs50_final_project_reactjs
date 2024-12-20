@@ -46,3 +46,23 @@ export const verifyEmail = async (email, code) => {
         return { error: true, message: error.message }
     }
 }
+export const resendValidationCode = async (email) => {
+    try {
+
+        const res = await fetch (`${API_URL}/resend-verification-code?email=${email}`, {
+            method: 'POST', 
+            headers: {'Content-Type' : 'application/json'},            
+        });
+        
+        if(!res.ok){
+            const error = await res.json();
+            throw new Error(error.error || "Validation failed")
+        }
+        const result = await res.json();
+        return result;
+
+    } catch (error) {
+        console.log(error);
+        return { error: true, message: error.message }
+    }
+}
