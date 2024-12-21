@@ -1,12 +1,14 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { resendValidationCode, verifyEmail } from "../../services/authService";
+import { useLocation } from "react-router-dom";
 
 function EmailVerificationPage() {
-    const [validate, setValidate] = useState({
-        'email': '',
-        'code': ''
-    })
+    const location = useLocation();
+    const querySearch = new URLSearchParams(location.search);
+    const email = querySearch.get('email');
+
+    const [code, setCode] = useState('')
     const [codeError, setCodeError] = useState('');
     const [emailError, setEmailError] = useState('');
 
@@ -15,20 +17,10 @@ function EmailVerificationPage() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setValidate((prev) => ({
-            ...prev,
-            [name]: value
-        }))
+        setCode(value)
     }
     const validateInput = (e) => {
         const { name, value } = e.target;
-        if (name === 'email') {
-            if (!/^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,}$/.test(value)) {
-                setEmailError('Email is not valid');
-            } else {
-                setEmailError('')
-            }
-        }
         if (name === 'code') {
             if (!/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(value)) {
                 setCodeError('Email is not valid');
@@ -39,36 +31,38 @@ function EmailVerificationPage() {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await verifyEmail(validate.email, validate.code)
+        const result = await verifyEmail(email, code)
         if (result.error) {
             setError(result.message)
         }
         setIsValid(true);
-
     }
 
     const handleResendCode = async () => {
-        if (!validate.email) {
+        if (!email) {
             setEmailError('Please enter valid email')
             return;
         } else {
             setEmailError('')
         }
-        const result = await resendValidationCode(validate.email)
+        const result = await resendValidationCode(email)
         if (result.error) {
             setError(result.message)
         }
-
     }
-
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
-            <Box>
-                <Box sx={{ fontSize: '1.5rem', fontWeight: 'bold', mb: 2 }}>
-                    Email verification
+            <Box  sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        width: '22rem',                       
+                        m: 2}}>
+                <Box sx={{ fontSize: '2rem', fontWeight: 'semibold', mb: 2, textAlign:'center' }}>
+                    Verify Email Address
                 </Box>
-                <Box>Please check your email to get verification code</Box>
+                <Box sx={{padding: 1}}>Please check your email {email} to get verification code</Box>
                 <Box component="form" onSubmit={handleSubmit}
                     sx={{
                         display: 'flex',
@@ -81,28 +75,18 @@ function EmailVerificationPage() {
                     autoComplete="off">
 
                     <TextField
-                        id="validate-email-input"
-                        label="Email"
-                        type="email"
-                        variant="standard"
-                        name="email"
-                        value={validate.email}
-                        onChange={(e) => { handleInputChange(e); validateInput(e) }}
-                        helperText={emailError || ' '}
-                        error={!!emailError}
-                    />
-                    <TextField
                         id="validate-code"
                         label="Code"
                         type="text"
                         variant="standard"
                         name="code"
-                        value={validate.code}
+                        value={code}
                         onChange={(e) => { handleInputChange(e); validateInput(e) }}
                         helperText={codeError || ' '}
                         error={!!codeError}
                     />
                     <Box>{!!error ? error : ' '}</Box>
+                    <Box>{!!emailError ? emailError : ' '}</Box>
                     <Box sx={{ mt: 2 }}>
                         <Button variant="contained" type="submit" sx={{ width: '100%' }}>
                             Validate
@@ -110,7 +94,7 @@ function EmailVerificationPage() {
                     </Box>
 
                 </Box>
-                <Button variant="text" onClick={handleResendCode}>click to resend code</Button>
+                <Button variant="text" onClick={handleResendCode}>resend code</Button>
             </Box>
         </Box>
     )

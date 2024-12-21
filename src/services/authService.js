@@ -65,4 +65,4 @@ export const resendValidationCode = async (email) => {
         console.log(error);
         return { error: true, message: error.message }
     }
-}
+} 

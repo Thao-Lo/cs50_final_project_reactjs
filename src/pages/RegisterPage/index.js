@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import RegisterForm from "../../component/RegisterForm";
 import { register } from "../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
     const [authentication, setAuthentication] = useState({
@@ -10,6 +11,7 @@ function RegisterPage() {
         password: '',
         confirmPassword: ''
     })
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -27,7 +29,7 @@ function RegisterPage() {
         if (result.error) {
             setError(result.message)
         } else {
-            console.log("register done");
+            navigate(`/verify-email?email=${authentication.email}`)
         }
         
 
