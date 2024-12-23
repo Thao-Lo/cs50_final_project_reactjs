@@ -19,6 +19,35 @@ axiosInstance.interceptors.request.use(
     },
     (error) => { return Promise.reject(error) }
 )
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        if (error.response && error.response.status === 401) {
+            const refreshToken = Cookies.get('refreshToken');
+            if (refreshToken) {
+                try {
+                    const res = axios.post(`${API_URL}/refresh-token`, {
+                        request: refreshToken
+                    });
+                    const accessToken = (await res).data;
+                    Cookies.set('accessToken', accessToken, { expires: 1 / 24 });
+                    error.config.headers.Authorization = `Bearer ${accessToken}`
+                    return axiosInstance(error.config)
+                } catch (refreshError) {
+                    console.log("Failed refresh Token");
+                    Cookies.remove('accessToken')
+                    Cookies.remove('refreshToken')
+                    window.location.href = '/login'
+                }
+            } else {
+                Cookies.remove('accessToken');
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error)
+    }
+)
+
 const handleError = (error, defaultMessage) => {
     if (error.response) {
         //server error

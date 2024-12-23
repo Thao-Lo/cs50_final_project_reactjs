@@ -1,6 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
-import RegisterForm from './component/RegisterForm';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 
 import ProductPage from './pages/ProductPage';
