@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import AuthGuard from './component/AuthGuard';
+import BookingComponent from './component/BookingComponent';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/verify-email" element={<AuthGuard><EmailVerificationPage /></AuthGuard>} />
         <Route path="/login" element={<AuthGuard><LoginPage /></AuthGuard>} />
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/booking" element={<BookingComponent />} />
       </Routes>
     </BrowserRouter>
   );
