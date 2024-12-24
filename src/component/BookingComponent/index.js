@@ -13,46 +13,14 @@ dayjs.extend(timezone)
 const availableTimes = ['17:30:00', '18:30:00', '19:30:00', '20:30:00']
 const capacity = [1, 2, 3, 4, 5, 6]
 
-function BookingComponent() {
-    const [bookingValues, setBookingValues] = useState({
-        capacity: 2,
-        date: dayjs.tz(new Date(), "Australia/Sydney"),
-        time: ''
-    })
-    const fetchSlot = async () => {
-        const slots = await getSlots(bookingValues.capacity, bookingValues.date, bookingValues.time);
-        if(slots.error){
-            console.log(slots.message);
-        }
-        console.log(slots);
-    }
-    useEffect(() => {
-        fetchSlot();
-    }, [bookingValues.capacity, bookingValues.date, bookingValues.time])
-
+function BookingComponent({bookingValues, handleInputChange, handleDateChange}) {  
 
     const shouldDisableDate = (date) => {
         const today = dayjs();
         const endDay = today.add(30, 'day');
         return date.isBefore(today, 'day') || date.isAfter(endDay, 'day')
     }
-    console.log("booking value", bookingValues)
-    console.log("date", (dayjs.tz(new Date(), "Australia/Sydney")).format("DD-MM-YYYY"))
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setBookingValues((prev) => ({
-            ...prev,
-            [name]: value
-        }))
-    }
-    const handleDateChange = (newDate) => {
-        setBookingValues((prev) => ({
-            ...prev,
-            date: newDate
-        }))
-    }
-
+   
     return (
         <Box>
             <Box component="form" onSubmit={() => { }}
