@@ -1,11 +1,12 @@
 import { Box, MenuItem, TextField } from "@mui/material";
 import { getFormattedTime, getNext30Days } from "../../utils/FormattedDateTime";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone'
+import { getSlots } from "../../services/bookingService";
 
 dayjs.extend(utc);
 dayjs.extend(timezone)
@@ -18,7 +19,16 @@ function BookingComponent() {
         date: dayjs.tz(new Date(), "Australia/Sydney"),
         time: ''
     })
-    
+    const fetchSlot = async () => {
+        const slots = await getSlots(bookingValues.capacity, bookingValues.date, bookingValues.time);
+        if(slots.error){
+            console.log(slots.message);
+        }
+        console.log(slots);
+    }
+    useEffect(() => {
+        fetchSlot();
+    }, [bookingValues.capacity, bookingValues.date, bookingValues.time])
 
 
     const shouldDisableDate = (date) => {
@@ -27,7 +37,7 @@ function BookingComponent() {
         return date.isBefore(today, 'day') || date.isAfter(endDay, 'day')
     }
     console.log("booking value", bookingValues)
-    console.log("date", (dayjs.tz(new Date(), "Australia/Sydney")).format("DD-MM-YYYY"))   
+    console.log("date", (dayjs.tz(new Date(), "Australia/Sydney")).format("DD-MM-YYYY"))
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -48,6 +58,7 @@ function BookingComponent() {
             <Box component="form" onSubmit={() => { }}
                 sx={{
                     display: 'flex',
+                    gap: '0.5rem',
                     width: '50rem',
                     m: 2,
                     '& .MuiTextField-root': { width: '15rem' }
@@ -92,7 +103,7 @@ function BookingComponent() {
                         value={bookingValues.date}
                         onChange={handleDateChange}
                         shouldDisableDate={shouldDisableDate} // Disable dates outside the range
-                        format="DD-MM-YYYY"
+                        format="DD-MM-YYYY"                        
                         slotProps={{
                             textField: {
                                 readOnly: true
