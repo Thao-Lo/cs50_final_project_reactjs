@@ -9,26 +9,39 @@ import timezone from 'dayjs/plugin/timezone'
 
 dayjs.extend(utc);
 dayjs.extend(timezone)
+const availableTimes = ['17:30:00', '18:30:00', '19:30:00', '20:30:00']
+const capacity = [1, 2, 3, 4, 5, 6]
 
 function BookingComponent() {
-    const [selectedDate, setSelectedDate] = useState(dayjs());
-    const today = dayjs();
-    const endDate = today.add(30, "day")
-    const shouldDisableDate = (date) => {
-        return date.isBefore(today, "day") || date.isAfter(endDate, "day");
-    };
-    console.log("today" + today + " endday " + endDate) ;
-
     const [bookingValues, setBookingValues] = useState({
         capacity: 2,
-        date: dayjs.tz(new Date(), "Australia/Sydney"),        
-        time: getFormattedTime()
+        date: dayjs.tz(new Date(), "Australia/Sydney"),
+        time: ''
     })
-    console.log(typeof(dayjs(dayjs.tz(new Date(), "Australia/Sydney").format('YYYY-MM-DD'))))
+    
 
-    const availableDates = getNext30Days();
-    const availableTimes = ['17:30:00', '18:30:00', '19:30:00', '20:30:00']
-    const capacity = [1, 2, 3, 4, 5, 6]
+
+    const shouldDisableDate = (date) => {
+        const today = dayjs();
+        const endDay = today.add(30, 'day');
+        return date.isBefore(today, 'day') || date.isAfter(endDay, 'day')
+    }
+    console.log("booking value", bookingValues)
+    console.log("date", (dayjs.tz(new Date(), "Australia/Sydney")).format("DD-MM-YYYY"))   
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setBookingValues((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+    const handleDateChange = (newDate) => {
+        setBookingValues((prev) => ({
+            ...prev,
+            date: newDate
+        }))
+    }
 
     return (
         <Box>
@@ -46,7 +59,9 @@ function BookingComponent() {
                     id="capacity-input"
                     select
                     label="Guests"
+                    name='capacity'
                     defaultValue="2"
+                    onChange={handleInputChange}
                 >
                     {capacity.map((option) => (
                         <MenuItem key={option} value={option}>
@@ -58,7 +73,9 @@ function BookingComponent() {
                     id="time-input"
                     select
                     label="Time"
-                    defaultValue="17:30:00"
+                    name='time'
+                    defaultValue=""
+                    onChange={handleInputChange}
                 >
                     {availableTimes.map((option) => (
                         <MenuItem key={option} value={option}>
@@ -66,24 +83,25 @@ function BookingComponent() {
                         </MenuItem>
                     ))}
                 </TextField>
+
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                        label="Controlled picker"
+                        id="date-input"
+                        label="Date"
+                        name='date'
                         value={bookingValues.date}
-                        onChange={() => { }}
+                        onChange={handleDateChange}
+                        shouldDisableDate={shouldDisableDate} // Disable dates outside the range
+                        format="DD-MM-YYYY"
+                        slotProps={{
+                            textField: {
+                                readOnly: true
+                            }
+
+                        }}
                     />
                 </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-                label="Select Date"
-                value={selectedDate}
-                onChange={(newValue) => setSelectedDate(newValue)}
-                shouldDisableDate={shouldDisableDate} // Disable dates outside the range
-                renderInput={(params) => <input {...params} />}
-            />
-        </LocalizationProvider>
             </Box>
-
         </Box>
     )
 
