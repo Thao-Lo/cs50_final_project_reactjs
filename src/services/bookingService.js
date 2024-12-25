@@ -7,7 +7,7 @@ export const getSlots = async (capacity, date, time) => {
         const res = await axiosInstance.get('/slots', {
             params: {
                 capacity: capacity,
-                date: dayjs(date).format('YYYY-MM-DD'),
+                date: date ? dayjs(date).format('YYYY-MM-DD') : null,
                 time: time
             }
         })

@@ -14,7 +14,7 @@ function BookingPage() {
 
     const [bookingValues, setBookingValues] = useState({
         capacity: '',
-        date: dayjs.tz(new Date(), "Australia/Sydney"),
+        date: null,
         time: ''
     })
     const [slots, setSlots] = useState([])
@@ -50,7 +50,7 @@ function BookingPage() {
     const handleDateChange = (newDate) => {
         setBookingValues((prev) => ({
             ...prev,
-            date: newDate
+            date: newDate ? dayjs.tz(newDate, "Australia/Sydney") : null
         }))
     }
 
