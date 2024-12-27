@@ -10,7 +10,7 @@ function SlotComponent({ slot, handleSlotClick }) {
     return (
         <Box sx={{ mb: 2 }}>
             <Card sx={{ width: '8rem' }}>
-                <CardActionArea onClick={handleSlotClick}>
+                <CardActionArea onClick={() => handleSlotClick(slot)}>
                     <CardContent sx={{ padding: '0.5rem' }}>
                         <Typography gutterBottom variant="body" component="div" sx={{ textAlign: 'center' }}>
                             {slot.time}

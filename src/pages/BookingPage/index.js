@@ -19,9 +19,11 @@ function BookingPage() {
         time: ''
     })
     const [slots, setSlots] = useState([])
+    const[selectedSlot, setSelectedSlot] = useState({})
     const [error, setError] = useState('')
     const [open, setOpen] = useState(false);
 
+    //Dialog
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -50,6 +52,7 @@ function BookingPage() {
 
     console.log(slots);
 
+    //for capacity and time - Booking component
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setBookingValues((prev) => ({
@@ -57,16 +60,18 @@ function BookingPage() {
             [name]: value
         }))
     }
+    //for date - Booking component
     const handleDateChange = (newDate) => {
         setBookingValues((prev) => ({
             ...prev,
             date: newDate ? dayjs.tz(newDate, "Australia/Sydney") : null
         }))
     }
-    const handleSlotClick = () => {
+    //click slot and pop up dialog
+    const handleSlotClick = (slot) => {
         handleClickOpen()
+        setSelectedSlot(slot)
     }
-
 
     const groupSlotsByDate = (slots) => {
         return slots.reduce((acc, slot) => {
@@ -105,7 +110,9 @@ function BookingPage() {
                 }}>
                     {
                         groupSlots[date].map((slot) => (
-                            <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />
+                            <>
+                            <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />                           
+                            </>
                         ))
                     }
                 </Box>
@@ -121,8 +128,8 @@ function BookingPage() {
             />
             <Box sx={{}}>
                 {slotList}
-            </Box>
-            <ConfirmBookingDialog handleClickOpen={handleClickOpen} handleClose={handleClose} open={open}/>
+            </Box> 
+            <ConfirmBookingDialog  handleClose={handleClose} open={open} slot={selectedSlot}/>           
         </Box >
     )
 
