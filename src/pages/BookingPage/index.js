@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 import { getSlots } from "../../services/bookingService";
 import SlotComponent from "../../component/SlotComponent";
 import ConfirmBookingDialog from "../../component/ConfirmBookingDialog";
+import { createReservation } from "../../services/reservationService";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -19,21 +20,14 @@ function BookingPage() {
         time: ''
     })
     const [slots, setSlots] = useState([])
-    const[selectedSlot, setSelectedSlot] = useState({})
+    const [selectedSlot, setSelectedSlot] = useState({})
     const [error, setError] = useState('')
     const [open, setOpen] = useState(false);
-
-    //Dialog
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     console.log("booking value", bookingValues)
     console.log("date", (dayjs.tz(new Date(), "Australia/Sydney")).format("DD-MM-YYYY"))
 
+    //fetch slot - bookingService
     const fetchSlot = async () => {
         const result = await getSlots(bookingValues.capacity, bookingValues.date, bookingValues.time);
         if (result.error) {
@@ -45,12 +39,20 @@ function BookingPage() {
         setSlots(result.availableSlots)
         setError('');
     }
-
     useEffect(() => {
         fetchSlot();
     }, [bookingValues.capacity, bookingValues.date, bookingValues.time])
-
     console.log(slots);
+
+    //create reservation api reservation/creat
+    const handleSelectedSlot = async (slot) => {
+        const result = await createReservation(slot);
+        if(result.error){
+            console.log(result.message);
+            return;
+        }
+        console.log(result);
+    }
 
     //for capacity and time - Booking component
     const handleInputChange = (e) => {
@@ -67,6 +69,13 @@ function BookingPage() {
             date: newDate ? dayjs.tz(newDate, "Australia/Sydney") : null
         }))
     }
+      //Dialog
+      const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
     //click slot and pop up dialog
     const handleSlotClick = (slot) => {
         handleClickOpen()
@@ -111,7 +120,7 @@ function BookingPage() {
                     {
                         groupSlots[date].map((slot) => (
                             <>
-                            <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />                           
+                                <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />
                             </>
                         ))
                     }
@@ -128,8 +137,8 @@ function BookingPage() {
             />
             <Box sx={{}}>
                 {slotList}
-            </Box> 
-            <ConfirmBookingDialog  handleClose={handleClose} open={open} slot={selectedSlot}/>           
+            </Box>
+            <ConfirmBookingDialog handleClose={handleClose} open={open} slot={selectedSlot} handleSelectedSlot={handleSelectedSlot}/>
         </Box >
     )
 

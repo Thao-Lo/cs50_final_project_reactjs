@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage';
 import AuthGuard from './component/AuthGuard';
 import BookingComponent from './component/BookingComponent';
 import BookingPage from './pages/BookingPage';
+import ReservationPage from './pages/ReservationPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<AuthGuard><LoginPage /></AuthGuard>} />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/booking" element={<BookingPage />} />
+        <Route path='/reservation' element={<ReservationPage />} />
       </Routes>
     </BrowserRouter>
   );

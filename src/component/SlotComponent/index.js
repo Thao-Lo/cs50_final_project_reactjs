@@ -1,11 +1,6 @@
 import { Box, Card, CardActionArea, CardContent, Typography } from "@mui/material";
-import ConfirmBookingDialog from "../ConfirmBookingDialog";
-import { useState } from "react";
-
-
 
 function SlotComponent({ slot, handleSlotClick }) {
-
 
     return (
         <Box sx={{ mb: 2 }}>
@@ -22,9 +17,6 @@ function SlotComponent({ slot, handleSlotClick }) {
                     </CardContent>
                 </CardActionArea>
             </Card>
-
-            
-
         </Box>
     );
 }

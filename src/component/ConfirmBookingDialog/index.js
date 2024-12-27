@@ -9,7 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
-function ConfirmBookingDialog({ handleSlectedSlot, handleClose, open, slot }) {
+function ConfirmBookingDialog({ handleSelectedSlot, handleClose, open, slot }) {
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -50,7 +50,7 @@ function ConfirmBookingDialog({ handleSlectedSlot, handleClose, open, slot }) {
                     <Button autoFocus onClick={handleClose}>
                         close
                     </Button>
-                    <Button onClick={handleSlectedSlot} autoFocus variant='contained'>
+                    <Button onClick={() => handleSelectedSlot(slot)} autoFocus variant='contained'>
                         Select
                     </Button>
                 </DialogActions>
