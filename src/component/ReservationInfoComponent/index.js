@@ -9,7 +9,7 @@ import HistoryToggleOffOutlinedIcon from '@mui/icons-material/HistoryToggleOffOu
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import BrunchDiningOutlinedIcon from '@mui/icons-material/BrunchDiningOutlined';
 
-function ReservationInfoComponent() {
+function ReservationInfoComponent({selectedSlot}) {
 
     return (
         <Card sx={{ minWidth: 275 ,maxWidth: 400}}>
@@ -22,19 +22,19 @@ function ReservationInfoComponent() {
                 </Typography>
                 <Typography sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
                     <CalendarMonthOutlinedIcon />
-                    28/12/24
+                    {selectedSlot.date}
                 </Typography>
                 <Typography variant="body2" sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
                     <HistoryToggleOffOutlinedIcon />
-                    18:30
+                    {selectedSlot.time}
                 </Typography>
                 <Typography variant="body2" sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
                     <BrunchDiningOutlinedIcon/>
-                    {'Dinner - Table 1'}
+                    {'Dinner -'}{selectedSlot.tableName}
                 </Typography>
                 <Typography sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
                     <GroupOutlinedIcon />
-                    {'Party of 2'}
+                    {'Party of '}{selectedSlot.capacity}
                 </Typography>
 
 

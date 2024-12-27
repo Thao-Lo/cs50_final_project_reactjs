@@ -7,6 +7,8 @@ import { getSlots } from "../../services/bookingService";
 import SlotComponent from "../../component/SlotComponent";
 import ConfirmBookingDialog from "../../component/ConfirmBookingDialog";
 import { createReservation } from "../../services/reservationService";
+import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
+import { useNavigate } from "react-router-dom";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -14,11 +16,14 @@ dayjs.extend(timezone)
 
 function BookingPage() {
 
+    const { state: slot, dispatch } = useReservation();
+
     const [bookingValues, setBookingValues] = useState({
         capacity: '',
         date: dayjs.tz(new Date(), "Australia/Sydney"),
         time: ''
     })
+    const navigate = useNavigate();
     const [slots, setSlots] = useState([])
     const [selectedSlot, setSelectedSlot] = useState({})
     const [error, setError] = useState('')
@@ -47,12 +52,19 @@ function BookingPage() {
     //create reservation api reservation/creat
     const handleSelectedSlot = async (slot) => {
         const result = await createReservation(slot);
-        if(result.error){
+        if (result.error) {
             console.log(result.message);
+            const errorMessage = result.message;
+            dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage } })
             return;
         }
         console.log(result);
+        dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: selectedSlot });
+        navigate('/reservation')
     }
+
+
+
 
     //for capacity and time - Booking component
     const handleInputChange = (e) => {
@@ -69,8 +81,8 @@ function BookingPage() {
             date: newDate ? dayjs.tz(newDate, "Australia/Sydney") : null
         }))
     }
-      //Dialog
-      const handleClickOpen = () => {
+    //Dialog
+    const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
@@ -138,7 +150,7 @@ function BookingPage() {
             <Box sx={{}}>
                 {slotList}
             </Box>
-            <ConfirmBookingDialog handleClose={handleClose} open={open} slot={selectedSlot} handleSelectedSlot={handleSelectedSlot}/>
+            <ConfirmBookingDialog handleClose={handleClose} open={open} slot={selectedSlot} handleSelectedSlot={handleSelectedSlot} />
         </Box >
     )
 

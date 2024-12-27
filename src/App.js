@@ -10,9 +10,11 @@ import AuthGuard from './component/AuthGuard';
 import BookingComponent from './component/BookingComponent';
 import BookingPage from './pages/BookingPage';
 import ReservationPage from './pages/ReservationPage';
+import { ReservationProvider } from './hooks/ReservationContext';
 
 function App() {
   return (
+    <ReservationProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -24,6 +26,7 @@ function App() {
         <Route path='/reservation' element={<ReservationPage />} />
       </Routes>
     </BrowserRouter>
+    </ReservationProvider>
   );
 }
 
