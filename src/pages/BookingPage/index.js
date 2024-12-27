@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { getSlots } from "../../services/bookingService";
 import SlotComponent from "../../component/SlotComponent";
+import ConfirmBookingDialog from "../../component/ConfirmBookingDialog";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -14,11 +15,20 @@ function BookingPage() {
 
     const [bookingValues, setBookingValues] = useState({
         capacity: '',
-        date: null,
+        date: dayjs.tz(new Date(), "Australia/Sydney"),
         time: ''
     })
     const [slots, setSlots] = useState([])
     const [error, setError] = useState('')
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     console.log("booking value", bookingValues)
     console.log("date", (dayjs.tz(new Date(), "Australia/Sydney")).format("DD-MM-YYYY"))
 
@@ -53,6 +63,10 @@ function BookingPage() {
             date: newDate ? dayjs.tz(newDate, "Australia/Sydney") : null
         }))
     }
+    const handleSlotClick = () => {
+        handleClickOpen()
+    }
+
 
     const groupSlotsByDate = (slots) => {
         return slots.reduce((acc, slot) => {
@@ -69,7 +83,7 @@ function BookingPage() {
     const slotList = (slots.length > 0) ?
         (Object.keys(groupSlots).map((date) => (
             <Box key={date}>
-                <Box sx={{}}>{date}</Box>
+                <Box sx={{ m: 1, fontWeight: 'semibold' }}>{date}</Box>
                 <Box sx={{
                     display: 'flex', gap: '0.5rem',
                     overflow: 'auto',
@@ -91,7 +105,7 @@ function BookingPage() {
                 }}>
                     {
                         groupSlots[date].map((slot) => (
-                            <SlotComponent key={slot.id} slot={slot} />
+                            <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />
                         ))
                     }
                 </Box>
@@ -102,14 +116,13 @@ function BookingPage() {
 
 
     return (
-        <Box>
+        <Box sx={{ margin: 2 }}>
             <BookingComponent bookingValues={bookingValues} handleDateChange={handleDateChange} handleInputChange={handleInputChange}
-
             />
-            <Box>
+            <Box sx={{}}>
                 {slotList}
             </Box>
-
+            <ConfirmBookingDialog handleClickOpen={handleClickOpen} handleClose={handleClose} open={open}/>
         </Box >
     )
 

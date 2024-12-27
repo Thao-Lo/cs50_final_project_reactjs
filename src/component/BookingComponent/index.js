@@ -23,7 +23,7 @@ function BookingComponent({ bookingValues, handleInputChange, handleDateChange }
     }
 
     return (
-        <Box>
+        <Box sx={{marginBottom: '1rem'}}>
             <Box component="form" onSubmit={() => { }}
                 sx={{
                     display: 'flex',
