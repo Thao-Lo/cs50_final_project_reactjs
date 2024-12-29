@@ -18,3 +18,9 @@ export const getNext30Days = () => {
     }
     return dates;
 }
+export const formatCountdownTime = (TTL) => {
+    const minutes = Math.floor(TTL / 60);
+    const seconds = TTL % 60;
+    const formatSeconds = seconds < 10 ? `0${seconds}` : seconds;
+    return `${minutes}:${formatSeconds}`
+}
