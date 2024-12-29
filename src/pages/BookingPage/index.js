@@ -58,8 +58,10 @@ function BookingPage() {
             dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage } })
             return;
         }
-        console.log(result);
-        dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: selectedSlot });
+        console.log("result", result);   
+        const countdown =  result.remainingTime;   
+        dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: slot });
+        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: countdown });
         navigate('/reservation')
     }
 

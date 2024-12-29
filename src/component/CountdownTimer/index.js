@@ -1,26 +1,16 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { formatCountdownTime } from "../../utils/FormattedDateTime";
+import { useReservation } from "../../hooks/ReservationContext";
 
-function CountdownTimer() {
-    const [timer, setTimer] = useState(300)
+function CountdownTimer({countdown, startCountDown}) {   
 
     useEffect(() => {
-        const interval = setInterval(
-            setTimer((prevTimer) => {
-                if (prevTimer > 0) {
-                    return prevTimer -= 1
-                } else {
-                    clearInterval(interval)
-                    return 0
-                }
-            })
-            , 1000)
-        return () => { clearInterval(interval) }
+       startCountDown(countdown)
     }, [])
 
     return (
-        <Box> Timer: {formatCountdownTime(timer)} </Box>
+        <Box> Timer: {formatCountdownTime(countdown)} </Box>
     )
 }
 
