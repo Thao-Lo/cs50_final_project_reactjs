@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useRef } from "react";
 
 const ReservationContext = createContext();
 const initialState = {
@@ -14,6 +14,7 @@ export const RESERVATION_ACTION = {
     SET_LOADING: 'SET_LOADING',
     SET_ERROR: 'SET_ERROR',
     DECREMENT_COUNTDOWN: 'DECREMENT_COUNTDOWN',
+    RESET_STATE: 'RESET_STATE'
 }
 const ReservationReducer = (state, action) => {
     switch (action.type) {
@@ -31,25 +32,32 @@ const ReservationReducer = (state, action) => {
             const countdown = parseInt(action.payload.countdown)
             return { ...state, countdown: countdown }
         }
+        case RESERVATION_ACTION.RESET_STATE: {
+            return initialState;
+        }      
+         default:
+            return state;
     }
 }
 
 export const ReservationProvider = ({ children }) => {
     const [state, dispatch] = useReducer(ReservationReducer, initialState);
+    const countdownRef = useRef(null);
 
     const startCountDown = (TTL) => {
-        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: TTL } })
-        let remainingTime = parseInt(TTL);
-        const interval = setInterval(() => {
-            remainingTime -= 1;
-            if (remainingTime > 0) {
-                dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: remainingTime } })
-            } else {
-                clearInterval(interval)
-                dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: 0 } })
-            }
-        }
-            , 1000)
+        // // dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: TTL } })
+        // countdownRef.current = TTL;
+        // const interval = setInterval(() => {
+        //     countdownRef.current -= 1;
+        //     if (countdownRef.current > 0) {
+        //         dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: countdownRef.current } })
+        //     } else {
+        //         clearInterval(interval)
+        //         dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: 0 } })
+        //     }
+        // }
+        //     , 1000)
+        // return interval;
     }
 
 

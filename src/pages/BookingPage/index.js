@@ -9,6 +9,8 @@ import ConfirmBookingDialog from "../../component/ConfirmBookingDialog";
 import { createReservation } from "../../services/reservationService";
 import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
 import { useNavigate } from "react-router-dom";
+import { SensorsOutlined } from "@mui/icons-material";
+import CountdownTimer from "../../component/CountdownTimer";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -29,14 +31,10 @@ function BookingPage() {
     const [error, setError] = useState('')
     const [open, setOpen] = useState(false);
 
-    console.log("booking value", bookingValues)
-    console.log("date", (dayjs.tz(new Date(), "Australia/Sydney")).format("DD-MM-YYYY"))
-
     //fetch slot - bookingService
     const fetchSlot = async () => {
         const result = await getSlots(bookingValues.capacity, bookingValues.date, bookingValues.time);
         if (result.error) {
-            console.log(result.message);
             setSlots([])
             setError(result.message)
             return;
@@ -47,7 +45,7 @@ function BookingPage() {
     useEffect(() => {
         fetchSlot();
     }, [bookingValues.capacity, bookingValues.date, bookingValues.time])
-    console.log(slots);
+
 
     //create reservation api reservation/creat
     const handleSelectedSlot = async (slot) => {
@@ -55,13 +53,16 @@ function BookingPage() {
         if (result.error) {
             console.log(result.message);
             // const errorMessage = result.message;
-            dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage:  result.message}})
+            dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage: result.message } })
             return;
         }
         console.log("result", result);
-        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime} });
+        console.log("TTL: " + result.remainingTime);
+        console.log(typeof (result.remainingTime));
+
+        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime } });
         dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
-        console.log(result.sessionId);
+
         navigate('/user/reservation')
     }
 
@@ -153,6 +154,7 @@ function BookingPage() {
                 {slotList}
             </Box>
             <ConfirmBookingDialog handleClose={handleClose} open={open} slot={selectedSlot} handleSelectedSlot={handleSelectedSlot} />
+
         </Box >
     )
 

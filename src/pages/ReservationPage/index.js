@@ -5,9 +5,9 @@ import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationConte
 import { retrieveReservationInfo } from "../../services/reservationService";
 
 function ReservationPage() {
-    const { state: { selectedSlot, countdown, sessionId, error }, startCountDown, dispatch } = useReservation();
-    console.log("selectedSlot", selectedSlot);
-    console.log("countdown", countdown);
+    const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();
+    // console.log("selectedSlot", selectedSlot);
+    // console.log("countdown", countdown);
     const fetchreservationInfo = async () => {
         if(!sessionId){
             return;
@@ -34,7 +34,7 @@ function ReservationPage() {
 
     return (
         <>
-            <CountdownTimer TTL={countdown} startCountDown={startCountDown} />
+            <CountdownTimer />
             {selectedSlot ? (
                 <ReservationInfoComponent key={selectedSlot.id} selectedSlot={selectedSlot} />
             ) : (
