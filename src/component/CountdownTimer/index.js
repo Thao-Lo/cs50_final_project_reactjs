@@ -5,12 +5,16 @@ import { useReservation } from "../../hooks/ReservationContext";
 
 function CountdownTimer({countdown, startCountDown}) {   
 
+    console.log(typeof("countdown" + countdown));
+    console.log(countdown);
+
     useEffect(() => {
-       startCountDown(countdown)
-    }, [])
+      let interval = startCountDown(countdown)
+      return () => clearInterval(interval)
+    }, [countdown])
 
     return (
-        <Box> Timer: {formatCountdownTime(countdown)} </Box>
+        <Box> Timer: {formatCountdownTime(parseInt(countdown))} </Box>
     )
 }
 

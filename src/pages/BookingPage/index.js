@@ -54,15 +54,15 @@ function BookingPage() {
         const result = await createReservation(slot);
         if (result.error) {
             console.log(result.message);
-            const errorMessage = result.message;
-            dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage } })
+            // const errorMessage = result.message;
+            dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage:  result.message}})
             return;
         }
-        console.log("result", result);   
-        const countdown =  result.remainingTime;   
-        dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: slot });
-        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: countdown });
-        navigate('/reservation')
+        console.log("result", result);
+        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime} });
+        dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
+        console.log(result.sessionId);
+        navigate('/user/reservation')
     }
 
 

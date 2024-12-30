@@ -5,7 +5,8 @@ export const API_URL = 'http://localhost:8080/api/v1'
 
 const axiosInstance = axios.create({
     baseURL: API_URL, //standard key
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: true,
 })
 
 //add Authorization to headers if accesstoken is present

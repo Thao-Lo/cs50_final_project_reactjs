@@ -23,7 +23,7 @@ function App() {
         <Route path="/login" element={<AuthGuard><LoginPage /></AuthGuard>} />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/booking" element={<BookingPage />} />
-        <Route path='/reservation' element={<ReservationPage />} />
+        <Route path='/user/reservation' element={<ReservationPage />} />
       </Routes>
     </BrowserRouter>
     </ReservationProvider>
