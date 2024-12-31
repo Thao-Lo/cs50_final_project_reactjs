@@ -49,16 +49,18 @@ export default function PaymentCompletePage() {
   const stripe = useStripe();
   const [status, setStatus] = useState("default");
   const [intentId, setIntentId] = useState(null);
-  const {paymentIntentId, setPaymentIntentId, clientSecret, setClientSecret} = useStripeContext();
+  const { setClientSecret } = useStripeContext();
+
 
   useEffect(() => {
     if (!stripe) {
       return;
     }
-    // const clientSecret = new URLSearchParams(window.location.search).get(
-    //   "payment_intent_client_secret"
-    // );
-
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    );
+    setClientSecret(clientSecret)
+    console.log("clientSecret" + clientSecret);
     if (!clientSecret) {
       return;
     }

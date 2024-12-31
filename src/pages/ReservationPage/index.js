@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CountdownTimer from "../../component/CountdownTimer";
 import ReservationInfoComponent from "../../component/ReservationInfoComponent";
 import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
@@ -9,7 +9,7 @@ import { useStripeContext } from "../../stripe/StripeContext";
 
 function ReservationPage() {
     const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();
-    const { setClientSecret, setPaymentIntent } = useStripeContext();
+    const { setClientSecret, setPaymentIntentId, clientSecret } = useStripeContext();
     const [paymentError, setPaymentError] = useState(null)
     // console.log("selectedSlot", selectedSlot);
     // console.log("countdown", countdown);
@@ -39,32 +39,35 @@ function ReservationPage() {
         }
         console.log("payment", result);
         setClientSecret(result.clientSecret)
-        setPaymentIntent(result.paymentIntent)
+        setPaymentIntentId(result.paymentIntentId)
     }
     useEffect(() => {
         fetchReservationInfo();
-       
+
     }, [sessionId])
 
-    useEffect(() => {       
+    useEffect(() => {
         fetchCreatePayment();
     }, [sessionId])
 
     if (!selectedSlot) {
         return <div>No Slot Selected {error}</div>; // Xử lý nếu chưa có dữ liệu
     }
-    if(paymentError){
+    if (paymentError) {
         return <div>{paymentError}</div>
     }
+    const paymentLayout = useMemo(() => {
+        <PaymentLayout>
+            <CheckoutForm />
+        </PaymentLayout>
+    }, [clientSecret])
     return (
         <>
             <CountdownTimer />
             {selectedSlot ? (
                 <>
                     <ReservationInfoComponent key={selectedSlot.id} selectedSlot={selectedSlot} />
-                    <PaymentLayout>
-                        <CheckoutForm />
-                    </PaymentLayout>
+                    {paymentLayout}
                 </>
             ) : (
                 <p>No slot selected</p>
@@ -74,4 +77,4 @@ function ReservationPage() {
 
     )
 }
-export default ReservationPage;
+export default ReservationPage; 

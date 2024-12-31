@@ -17,4 +17,4 @@ export const StripeProvider = ({ children }) => {
 
 }
 
-export const useStripeContext = () => useContext(StripeContext); 
+export const useStripeContext = () => useContext(StripeContext);  
