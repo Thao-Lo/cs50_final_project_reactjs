@@ -6,8 +6,8 @@ import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationConte
 function CountdownTimer() {
     const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();    
     const countdownRef = useRef(null)
-    console.log(typeof ("countdown" + countdown));
-    console.log(countdown);
+    // console.log(typeof ("countdown" + countdown));
+    // console.log(countdown);
 
     useEffect(() => {
         countdownRef.current = countdown;

@@ -1,0 +1,19 @@
+import { createContext, useContext, useState } from "react";
+
+
+const StripeContext = createContext();
+
+export const StripeProvider = ({ children }) => {
+    const [paymentIntentId, setPaymentIntentId] = useState('');
+    const [clientSecret, setClientSecret] = useState('');
+
+   
+    return (
+        <StripeContext.Provider value={{ paymentIntentId, setPaymentIntentId, clientSecret, setClientSecret }}>          
+                {children}            
+        </StripeContext.Provider>
+    )
+
+}
+
+export const useStripeContext = () => useContext(StripeContext); 

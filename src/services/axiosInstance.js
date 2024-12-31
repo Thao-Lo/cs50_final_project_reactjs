@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
                     const res = axios.post(`${API_URL}/refresh-token`, {
                         request: refreshToken
                     });
-                    const accessToken = (await res).data;
+                    const accessToken = await res.data;
                     Cookies.set('accessToken', accessToken, { expires: 1 / 24 });
                     //add new accessToken to error config 
                     error.config.headers.Authorization = `Bearer ${accessToken}`
