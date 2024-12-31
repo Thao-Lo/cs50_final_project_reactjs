@@ -4,8 +4,9 @@ import { createContext, useContext, useState } from "react";
 const StripeContext = createContext();
 
 export const StripeProvider = ({ children }) => {
-    const [paymentIntentId, setPaymentIntentId] = useState('');
+    const [paymentIntentId, setPaymentIntentId] = useState(null);
     const [clientSecret, setClientSecret] = useState('');
+    console.log("Payment Intent:  " , paymentIntentId);
 
    
     return (

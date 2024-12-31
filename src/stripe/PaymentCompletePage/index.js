@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   useStripe,
 } from "@stripe/react-stripe-js";
+import { useStripeContext } from "../StripeContext";
 
 
 const SuccessIcon =
@@ -46,18 +47,17 @@ const STATUS_CONTENT_MAP = {
 
 export default function PaymentCompletePage() {
   const stripe = useStripe();
-
   const [status, setStatus] = useState("default");
   const [intentId, setIntentId] = useState(null);
+  const {paymentIntentId, setPaymentIntentId, clientSecret, setClientSecret} = useStripeContext();
 
   useEffect(() => {
     if (!stripe) {
       return;
     }
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
+    // const clientSecret = new URLSearchParams(window.location.search).get(
+    //   "payment_intent_client_secret"
+    // );
 
     if (!clientSecret) {
       return;
@@ -99,7 +99,7 @@ export default function PaymentCompletePage() {
           <path d="M8.66672 0C8.18347 0 7.79172 0.391751 7.79172 0.875C7.79172 1.35825 8.18347 1.75 8.66672 1.75H11.5126L4.83967 8.42295C4.49796 8.76466 4.49796 9.31868 4.83967 9.66039C5.18138 10.0021 5.7354 10.0021 6.07711 9.66039L12.7501 2.98744V5.83333C12.7501 6.31658 13.1418 6.70833 13.6251 6.70833C14.1083 6.70833 14.5001 6.31658 14.5001 5.83333V0.875C14.5001 0.391751 14.1083 0 13.6251 0H8.66672Z" fill="#0055DE" />
         </svg>
       </a>}
-      <a id="retry-button" href="/checkout">Test another</a>
+      <a id="retry-button" href="/user/reservation">Test another</a>
     </div>
   );
 }

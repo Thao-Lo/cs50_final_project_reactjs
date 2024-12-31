@@ -9,7 +9,7 @@ import { useStripeContext } from "../../stripe/StripeContext";
 
 function ReservationPage() {
     const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();
-    const { setClientSecret, setPaymentIntentId } = useStripeContext();
+    const { setClientSecret, setPaymentIntent } = useStripeContext();
     const [paymentError, setPaymentError] = useState(null)
     // console.log("selectedSlot", selectedSlot);
     // console.log("countdown", countdown);
@@ -39,7 +39,7 @@ function ReservationPage() {
         }
         console.log("payment", result);
         setClientSecret(result.clientSecret)
-        setPaymentIntentId(result.paymentIntentId)
+        setPaymentIntent(result.paymentIntent)
     }
     useEffect(() => {
         fetchReservationInfo();

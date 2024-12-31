@@ -26,16 +26,20 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
-        if (error.response && error.response.status === 401) {
+        const status = error.response ? error.response.status : null
+        if (status === 401 || status === 403) {
             //get refreshToken from cookies
             const refreshToken = Cookies.get('refreshToken');
+        
             if (refreshToken) {
                 try {
                     //send api to backend to ask for new accessToken
-                    const res = axios.post(`${API_URL}/refresh-token`, {
-                        request: refreshToken
+                    const res = await axios.post(`${API_URL}/refresh-token`, {
+                        //"refreshToken" : "hgdsghrngd" in body
+                        refreshToken: refreshToken
                     });
-                    const accessToken = await res.data;
+                    const accessToken = await res.data.accessToken;
+                   
                     Cookies.set('accessToken', accessToken, { expires: 1 / 24 });
                     //add new accessToken to error config 
                     error.config.headers.Authorization = `Bearer ${accessToken}`
