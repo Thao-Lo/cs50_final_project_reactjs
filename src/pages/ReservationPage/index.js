@@ -11,6 +11,8 @@ function ReservationPage() {
     const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();
     const { setClientSecret, setPaymentIntentId, clientSecret } = useStripeContext();
     const [paymentError, setPaymentError] = useState(null)
+    const [hasFetched, setHasFetched] = useState(true)
+    
     // console.log("selectedSlot", selectedSlot);
     // console.log("countdown", countdown);
     const fetchReservationInfo = async () => {
@@ -56,18 +58,20 @@ function ReservationPage() {
     if (paymentError) {
         return <div>{paymentError}</div>
     }
-    const paymentLayout = useMemo(() => {
-        <PaymentLayout>
-            <CheckoutForm />
-        </PaymentLayout>
-    }, [clientSecret])
+    // const paymentLayout = useMemo(() => {
+    //     <PaymentLayout>
+    //         <CheckoutForm />
+    //     </PaymentLayout>
+    // }, [clientSecret])
     return (
         <>
             <CountdownTimer />
             {selectedSlot ? (
                 <>
                     <ReservationInfoComponent key={selectedSlot.id} selectedSlot={selectedSlot} />
-                    {paymentLayout}
+                    <PaymentLayout>
+                        <CheckoutForm />
+                    </PaymentLayout>
                 </>
             ) : (
                 <p>No slot selected</p>

@@ -11,7 +11,8 @@ import ReservationPage from './pages/ReservationPage';
 import { ReservationProvider } from './hooks/ReservationContext';
 import PaymentLayout from './stripe/PaymentLayout';
 import { StripeProvider } from './stripe/StripeContext';
-import PaymentCompletePage from './stripe/PaymentCompletePage';
+import PaymentCompletePage from './pages/PaymentCompletePage';
+
 
 
 
@@ -29,7 +30,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/booking" element={<BookingPage />} />
             <Route path='/user/reservation' element={<ReservationPage />} />
-            <Route path="/user/reservation/payment-complete" element={<PaymentLayout><PaymentCompletePage /></PaymentLayout>} />
+            <Route path="/user/reservation/payment-complete" element={<PaymentCompletePage />} />
           </Routes>
         </BrowserRouter>
       </ReservationProvider>

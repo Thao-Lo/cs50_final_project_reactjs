@@ -5,6 +5,8 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 import { useStripeContext } from "../StripeContext";
+import { useNavigate } from "react-router-dom";
+import { useReservation } from "../../hooks/ReservationContext";
 
 
 function CheckoutForm() {
@@ -12,7 +14,7 @@ function CheckoutForm() {
   const elements = useElements();
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const {clientSecret} = useStripeContext();
+  const { state: { sessionId } } = useReservation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,8 +30,7 @@ function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: `http://localhost:3000/user/reservation/payment-complete?clientSecret=${clientSecret}`,
+        return_url: `http://localhost:3000/user/reservation/payment-complete?sessionId=${sessionId}`
       },
     });
 

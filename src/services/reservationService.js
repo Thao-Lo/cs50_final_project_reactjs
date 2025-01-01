@@ -23,12 +23,26 @@ export const retrieveReservationInfo = async (sessionId) => {
 }
 
 export const createPayment = async (sessionId) => {
-    try{
+    try {
         const res = await axiosInstance.post(`/user/reservation/create-payment`, null, {
             params: { sessionId: sessionId }
         })
         return res.data;
-    }catch(error){
+    } catch (error) {
+        return handleError(error, 'Can not create payment')
+    }
+}
+
+export const confirmReservation = async (sessionId, paymentIntentId ) => {
+    try {
+        const res = await axiosInstance.post(`/user/reservation/confirm-reservation`,{}, {
+            params: {
+                 sessionId: sessionId ,
+                 paymentIntentId: paymentIntentId
+                }
+        })
+        return res.data;
+    } catch (error) {
         return handleError(error, 'Can not create payment')
     }
 }
