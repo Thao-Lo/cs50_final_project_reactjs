@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CountdownTimer from "../../component/CountdownTimer";
 import ReservationInfoComponent from "../../component/ReservationInfoComponent";
 import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
@@ -11,8 +11,9 @@ function ReservationPage() {
     const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();
     const { setClientSecret, setPaymentIntentId, clientSecret } = useStripeContext();
     const [paymentError, setPaymentError] = useState(null)
-    const [hasFetched, setHasFetched] = useState(true)
-    
+    const [hasFetched, setHasFetched] = useState(false)
+    const prevSessionId = useRef();
+
     // console.log("selectedSlot", selectedSlot);
     // console.log("countdown", countdown);
     const fetchReservationInfo = async () => {
@@ -45,11 +46,15 @@ function ReservationPage() {
     }
     useEffect(() => {
         fetchReservationInfo();
-
     }, [sessionId])
 
     useEffect(() => {
-        fetchCreatePayment();
+        console.log("CHANGED");
+        if (sessionId && prevSessionId.current != sessionId) {
+        prevSessionId.current = sessionId;
+            fetchCreatePayment();
+        }  
+       
     }, [sessionId])
 
     if (!selectedSlot) {
