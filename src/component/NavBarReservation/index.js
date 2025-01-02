@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../services/authService';
+import { useUser } from '../../hooks/UserContext';
 
 
 const pages = [{
@@ -25,7 +26,7 @@ const pages = [{
     label: 'Booking'
 },
 {
-    route: '/dashboard',
+    route: '/admin/dashboard',
     label: 'Dashboard'
 }, {
     route: '/me',
@@ -41,6 +42,7 @@ const pages = [{
 ];
 function NavBarReservation() {
     const [anchorElNav, setAnchorElNav] = useState(null);
+    const { state: { error, user, isAuthenticated }, dispatch } = useUser();
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -104,6 +106,8 @@ function NavBarReservation() {
                             onClose={handleCloseNavMenu}
                             sx={{ display: { xs: 'block', md: 'none' } }}
                         >
+                            
+
                             {pages.map(({ route, label }) => (
                                 <MenuItem key={label} onClick={() => { handleCloseNavMenu(); handleMenuClick(label) }}>
                                     <Typography
