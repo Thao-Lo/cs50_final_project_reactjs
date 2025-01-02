@@ -14,7 +14,7 @@ export const login = async (data) => {
         const result = res.data;
         console.log(result.accessToken);
         if (result.accessToken) {
-            Cookies.set('accessToken', result.accessToken, { expires: 1 / 24 })
+            Cookies.set('accessToken', result.accessToken, { expires: 1 / 24})
             Cookies.set('refreshToken', result.refreshToken, { expires: 7 })
         }
         return result;

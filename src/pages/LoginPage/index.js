@@ -1,6 +1,6 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LoginForm from "../../component/LoginForm";
 import { login } from "../../services/authService";
 
@@ -39,9 +39,9 @@ function LoginPage() {
     }
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
+        <Box sx={{ display: 'flex',flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
             <LoginForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
-
+            <Typography component={NavLink} to={'/register'}>Not Register yet? Click here</Typography>
         </Box>
     )
 }

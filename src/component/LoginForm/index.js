@@ -1,6 +1,6 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 function LoginForm({ authentication, handleInputChange, handleSubmit, error }) {
@@ -113,8 +113,7 @@ function LoginForm({ authentication, handleInputChange, handleSubmit, error }) {
                 <Button variant="contained" type="submit" sx={{ width: '100%' }}>
                     Login
                 </Button>
-            </Box>
-
+            </Box>           
         </Box>
 
     )

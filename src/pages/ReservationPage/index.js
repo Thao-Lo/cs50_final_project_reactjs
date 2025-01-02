@@ -10,8 +10,7 @@ import { useStripeContext } from "../../stripe/StripeContext";
 function ReservationPage() {
     const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();
     const { setClientSecret, setPaymentIntentId, clientSecret } = useStripeContext();
-    const [paymentError, setPaymentError] = useState(null)
-    const [hasFetched, setHasFetched] = useState(false)
+    const [paymentError, setPaymentError] = useState(null)   
     const prevSessionId = useRef();
 
     // console.log("selectedSlot", selectedSlot);
@@ -63,11 +62,7 @@ function ReservationPage() {
     if (paymentError) {
         return <div>{paymentError}</div>
     }
-    // const paymentLayout = useMemo(() => {
-    //     <PaymentLayout>
-    //         <CheckoutForm />
-    //     </PaymentLayout>
-    // }, [clientSecret])
+
     return (
         <>
             <CountdownTimer />

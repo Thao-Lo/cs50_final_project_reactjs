@@ -1,8 +1,8 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import RegisterForm from "../../component/RegisterForm";
 import { register } from "../../services/authService";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function RegisterPage() {
     const [authentication, setAuthentication] = useState({
@@ -36,9 +36,9 @@ function RegisterPage() {
     }
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
             <RegisterForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
-
+            <Typography component={NavLink} to={'/login'}>Already have account? Click to Login</Typography>
         </Box>
     )
 
