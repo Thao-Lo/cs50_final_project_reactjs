@@ -3,7 +3,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { useStripeContext } from "../StripeContext";
-
+import '../../static/css/StripeStyles.css'
 
 
 const SuccessIcon =
@@ -50,14 +50,14 @@ export default function PaymentCompleteComponent() {
   const stripe = useStripe();
   const [status, setStatus] = useState("default");
 
-  const {clientSecret, paymentIntentId, setPaymentIntentId } = useStripeContext();
+  const { clientSecret, paymentIntentId, setPaymentIntentId } = useStripeContext();
 
 
   useEffect(() => {
     if (!stripe) {
       return;
     }
-   
+
 
     if (!clientSecret) {
       return;
@@ -73,7 +73,8 @@ export default function PaymentCompleteComponent() {
     });
   }, [stripe]);
 
-  return (    
+  return (
+    <div className="StripeContainer">
       <div id="payment-status">
         <div id="status-icon" style={{ backgroundColor: STATUS_CONTENT_MAP[status].iconColor }}>
           {STATUS_CONTENT_MAP[status].icon}
@@ -101,6 +102,6 @@ export default function PaymentCompleteComponent() {
         </a>}
         <a id="retry-button" href="/user/reservation">Test another</a>
       </div>
-   
+    </div>
   );
 }

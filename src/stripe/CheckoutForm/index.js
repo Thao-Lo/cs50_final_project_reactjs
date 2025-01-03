@@ -7,7 +7,7 @@ import {
 import { useStripeContext } from "../StripeContext";
 import { useNavigate } from "react-router-dom";
 import { useReservation } from "../../hooks/ReservationContext";
-
+import '../../static/css/StripeStyles.css'
 
 function CheckoutForm() {
   const stripe = useStripe();
