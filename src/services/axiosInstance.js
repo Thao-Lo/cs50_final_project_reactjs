@@ -11,8 +11,24 @@ const axiosInstance = axios.create({
 
 //add Authorization to headers if accesstoken is present
 axiosInstance.interceptors.request.use(
-    (config) => {
+    async (config) => {
         const accessToken = Cookies.get('accessToken');
+        const refreshToken = Cookies.get('refreshToken');
+        if (!accessToken && refreshToken) {
+            try {
+                const res = await axios.post(`${API_URL}/refresh-token`, {
+                    refreshToken: refreshToken
+                })
+                const accessToken = await res.data.accessToken;
+                Cookies.set('accessToken', accessToken, { expires: 1 / 24 })
+                config.headers.Authorization = `Bearer ${accessToken}`
+            } catch (error) {
+                console.log("Failed refresh Token");
+                Cookies.remove('accessToken')
+                Cookies.remove('refreshToken')
+                window.location.href = '/login'
+            }
+        }
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`
         }
@@ -30,7 +46,7 @@ axiosInstance.interceptors.response.use(
         if (status === 401 || status === 403) {
             //get refreshToken from cookies
             const refreshToken = Cookies.get('refreshToken');
-        
+
             if (refreshToken) {
                 try {
                     //send api to backend to ask for new accessToken
@@ -39,7 +55,7 @@ axiosInstance.interceptors.response.use(
                         refreshToken: refreshToken
                     });
                     const accessToken = await res.data.accessToken;
-                   
+
                     Cookies.set('accessToken', accessToken, { expires: 1 / 24 });
                     //add new accessToken to error config 
                     error.config.headers.Authorization = `Bearer ${accessToken}`

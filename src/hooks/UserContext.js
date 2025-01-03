@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
+import Cookies from 'js-cookie';
 
 const UserContext = createContext();
 const initialState = {
@@ -33,6 +34,12 @@ const UserReducer = (state, action) => {
 }
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(UserReducer, initialState)
+    useEffect(() => {
+        if (Cookies.get('accessToken')) {
+            dispatch({ type: USER_ACTION.LOGIN, payload: { isAuthenticated: true } })
+        }
+    }, [])
+
     return (
         <UserContext.Provider value={{ state, dispatch }}>
             {children}
