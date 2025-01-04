@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import Cookies from 'js-cookie';
+import { getUserbyAccessToken } from "../services/authService";
 
 const UserContext = createContext();
 const initialState = {
@@ -34,9 +35,19 @@ const UserReducer = (state, action) => {
 }
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(UserReducer, initialState)
+
+    const fetchUserProfile = async () => {
+        const result = await getUserbyAccessToken();
+        if (result.error) {
+            dispatch({ type: USER_ACTION.AUTH_ERROR, payload: result.message })
+            return;
+        }
+        dispatch({ type: USER_ACTION.LOGIN, payload: result.user })
+    }
+
     useEffect(() => {
         if (Cookies.get('accessToken')) {
-            dispatch({ type: USER_ACTION.LOGIN, payload: { isAuthenticated: true } })
+            fetchUserProfile();
         }
     }, [])
 

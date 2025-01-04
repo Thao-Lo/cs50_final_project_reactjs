@@ -27,7 +27,7 @@ const pages = [{
     route: '/admin/dashboard',
     label: 'Dashboard'
 }, {
-    route: '/me',
+    route: '/user/profile',
     label: 'My Account'
 },
 {

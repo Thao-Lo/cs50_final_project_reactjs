@@ -14,7 +14,7 @@ export const login = async (data) => {
         const result = res.data;
         console.log(result.accessToken);
         if (result.accessToken) {
-            Cookies.set('accessToken', result.accessToken, { expires: 1 / 24})
+            Cookies.set('accessToken', result.accessToken, { expires: 1 / 24 })
             Cookies.set('refreshToken', result.refreshToken, { expires: 7 })
         }
         return result;
@@ -50,6 +50,14 @@ export const resendValidationCode = async (email) => {
 
     } catch (error) {
         return handleError(error, "Validation failed")
+    }
+}
+export const getUserbyAccessToken = async () => {
+    try {
+        const res = await axiosInstance.get(`/user/profile`, {})
+        return res.data;
+    } catch (error) {
+        return handleError(error, "Cannot get user information")
     }
 }
 
