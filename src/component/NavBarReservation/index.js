@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { USER_ACTION, useUser } from '../../hooks/UserContext';
 import { logout } from '../../services/authService';
-
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 const pages = [{
     route: '/',
@@ -99,7 +99,7 @@ function NavBarReservation() {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <AllInclusiveIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -115,7 +115,7 @@ function NavBarReservation() {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Zavis
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -149,7 +149,7 @@ function NavBarReservation() {
                             {renderMenuItems()}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    <AllInclusiveIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -166,7 +166,7 @@ function NavBarReservation() {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Zavis
                     </Typography>
                     {/* DESKTOP VIEW */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

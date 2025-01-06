@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 function ConfirmBookingDialog({ handleSelectedSlot, handleClose, open, slot }) {
 
@@ -19,11 +19,15 @@ function ConfirmBookingDialog({ handleSelectedSlot, handleClose, open, slot }) {
                 fullScreen={fullScreen}
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="create-booking"
+                aria-labelledby="create-booking" 
+                scroll='paper'               
                 sx={{
                     "& .MuiBackdrop-root": {
                         backgroundColor: "rgb(144 143 143 / 20%)",
                     },
+                    width:{xs:390,sm:650, md: 'inherit'},
+                    height:{xs:600, sm: 'inherit'},
+                    overflowX:{xs:'auto'}
                 }}
             >
                 <DialogTitle id="create-booking">
@@ -34,17 +38,17 @@ function ConfirmBookingDialog({ handleSelectedSlot, handleClose, open, slot }) {
                         {slot.tableName} - Dining
 
                     </DialogContentText>
-                    <DialogContentText>
-                        <Box sx={{ mb: 2 }}>Credit card details are required for all reservations at Zavis. Should you cancel your reservation within 72 hours of the arrival time, or fail to show for the booking, a cancellation charge of $325 per person will be incurred.</Box>
-                        <Box sx={{ fontWeight: 'bold', mb: 2 }}>Cancellation Policy</Box>
-                        <Box sx={{ mb: 2 }}>
+                    <DialogContent>
+                        <Typography sx={{ mb: 2 }}>Credit card details are required for all reservations at Zavis. Should you cancel your reservation within 72 hours of the arrival time, or fail to show for the booking, a cancellation charge of $325 per person will be incurred.</Typography>
+                        <Typography sx={{ fontWeight: 'bold', mb: 2 }}>Cancellation Policy</Typography>
+                        <Typography sx={{ mb: 2 }}>
                             Credit card details are required for all reservations at Zavis. Should you cancel your reservation within 72 hours of the arrival time, or fail to show for the booking, a cancellation charge of $325 per person will be incurred.
-                        </Box>
-                        <Box sx={{ mb: 2 }}>
+                        </Typography>
+                        <Typography sx={{ mb: 2 }}>
                             Please call us on (02) 4567 5600 or email reservations@zavis.com.au to make any changes to your booking.
-                        </Box>
+                        </Typography>
 
-                    </DialogContentText>
+                    </DialogContent>
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={handleClose}>

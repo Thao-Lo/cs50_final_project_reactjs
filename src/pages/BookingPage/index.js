@@ -2,7 +2,7 @@ import dayjs, { utc } from "dayjs";
 import timezone from 'dayjs/plugin/timezone'
 import BookingComponent from "../../component/BookingComponent";
 import { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { getSlots } from "../../services/bookingService";
 import SlotComponent from "../../component/SlotComponent";
 import ConfirmBookingDialog from "../../component/ConfirmBookingDialog";
@@ -112,7 +112,7 @@ function BookingPage() {
     const slotList = (slots.length > 0) ?
         (Object.keys(groupSlots).map((date) => (
             <Box key={date}>
-                <Box sx={{ m: 1, fontWeight: 'semibold' }}>{date}</Box>
+                <Box sx={{ m: 1, fontWeight: 'bold', textDecoration:'underline' }}>{date}</Box>
                 <Box sx={{
                     display: 'flex', gap: '0.5rem',
                     overflow: 'auto',
@@ -147,7 +147,7 @@ function BookingPage() {
 
 
     return (
-        <Box sx={{ margin: 2 }}>
+        <Box sx={{ margin: 2, padding: 2, maxWidth: 1200, maxheight: 900 }} component={Paper}>
             <BookingComponent bookingValues={bookingValues} handleDateChange={handleDateChange} handleInputChange={handleInputChange}
             />
             <Box sx={{}}>

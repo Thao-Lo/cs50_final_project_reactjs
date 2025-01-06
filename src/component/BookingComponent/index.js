@@ -28,7 +28,7 @@ function BookingComponent({ bookingValues, handleInputChange, handleDateChange }
                 sx={{
                     display: 'flex',
                     gap: '0.5rem',
-                    width: '50rem',
+                    maxWidth: '50rem',
                     flexGrow: 1,
                     m: 2,
                     '& .MuiTextField-root': { width: '15rem' }
@@ -36,7 +36,7 @@ function BookingComponent({ bookingValues, handleInputChange, handleDateChange }
                 noValidate
                 autoComplete="off">
                 <Grid container spacing={2}>
-                    <Grid size={{ xs: 6, md: 4 }}>
+                    <Grid size={{ xs: 12,sm: 6, md: 4 }}>
                         <TextField
                             id="capacity-input"
                             select
@@ -44,6 +44,7 @@ function BookingComponent({ bookingValues, handleInputChange, handleDateChange }
                             name='capacity'
                             defaultValue="2"
                             onChange={handleInputChange}
+                            sx={{width: '100%'}}
                         >
                             {capacity.map((option) => (
                                 <MenuItem key={option} value={option}>
@@ -52,7 +53,7 @@ function BookingComponent({ bookingValues, handleInputChange, handleDateChange }
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid size={{ xs: 12, sm: 4 }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                         <TextField
                             id="time-input"
                             select
@@ -68,7 +69,7 @@ function BookingComponent({ bookingValues, handleInputChange, handleDateChange }
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid size={{ xs: 6, md: 4 }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4}}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 id="date-input"
