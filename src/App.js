@@ -12,7 +12,7 @@ import { StripeProvider } from './stripe/StripeContext';
 import PaymentCompletePage from './pages/PaymentCompletePage';
 import NavBarReservation from './component/NavBarReservation';
 import { UserProvider } from './hooks/UserContext';
-import UserProfileComponent from './component/UserProfileComponent';
+import UserPage from './pages/UserPage';
 
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
               <Route path="/booking" element={<BookingPage />} />
               <Route path='/user/reservation' element={<ReservationPage />} />
               <Route path="/user/reservation/payment-complete" element={<PaymentCompletePage />} />
-              <Route path="/user/profile" element={<UserProfileComponent />} />
+              <Route path="/user/profile" element={<UserPage />} />
             </Routes>
           </BrowserRouter>
         </ReservationProvider>

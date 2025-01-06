@@ -29,20 +29,38 @@ export const createPayment = async (sessionId) => {
         })
         return res.data;
     } catch (error) {
-        return handleError(error, 'Can not create payment')
+        return handleError(error, 'Cannot create payment')
     }
 }
 
-export const confirmReservation = async (sessionId, paymentIntentId ) => {
+//post if only params must include {} body
+export const confirmReservation = async (sessionId, paymentIntentId) => {
     try {
-        const res = await axiosInstance.post(`/user/reservation/confirm-reservation`,{}, {
+        const res = await axiosInstance.post(`/user/reservation/confirm-reservation`, {}, {
             params: {
-                 sessionId: sessionId ,
-                 paymentIntentId: paymentIntentId
-                }
+                sessionId: sessionId,
+                paymentIntentId: paymentIntentId
+            }
         })
         return res.data;
     } catch (error) {
         return handleError(error, 'Can not create payment')
+    }
+}
+
+//get dont include {} body before params
+export const retrieveUserReservationList = async (userId, page, size) => {
+    try {
+        const res = await axiosInstance.get(`/user/reservation-list`, {
+            params: {
+                userId: Number(userId),
+                page: page,
+                size: size
+            }
+        });
+        return res.data;
+
+    } catch (error) {
+        return handleError(error, "Cannot get user reservation list")
     }
 }

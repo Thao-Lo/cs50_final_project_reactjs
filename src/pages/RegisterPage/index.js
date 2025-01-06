@@ -30,8 +30,7 @@ function RegisterPage() {
             setError(result.message)
         } else {
             navigate(`/verify-email?email=${authentication.email}`)
-        }
-        
+        }       
 
     }
 
