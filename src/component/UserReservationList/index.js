@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, TableContainer, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { useUser } from "../../hooks/UserContext";
@@ -12,12 +12,12 @@ function UserReservationList() {
     const [reservationList, setReservationList] = useState([]);
 
     const columns = [
-        { field: 'id', headerName: 'No', width: 70 },
-        { field: 'tableName', headerName: 'Table name', width: 160 },
-        { field: 'capacity', headerName: 'No.of Guests', width: 160 },
-        { field: 'date', headerName: 'Date', width: 130 },
-        { field: 'time', headerName: 'Time', width: 130 },
-        { field: 'status', headerName: 'Status', sortable: false, width: 130 },
+        { field: 'id', headerName: 'No', width: 100 },
+        { field: 'tableName', headerName: 'Table name', width: 140 },
+        { field: 'capacity', headerName: 'Guests', width: 120 },
+        { field: 'date', headerName: 'Date', width: 120 },
+        { field: 'time', headerName: 'Time', width: 110 },
+        { field: 'status', headerName: 'Status', sortable: false, width: 110 },
     ];
     const fetchUserReservationList = async () => {
         const result = await retrieveUserReservationList(user.id);
@@ -52,16 +52,22 @@ function UserReservationList() {
     }
     return (
         <>
-            <Paper sx={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[5, 10]}
-                    checkboxSelection
-                    sx={{ border: 0 }}
-                />
-            </Paper>
+            <Box>
+                <Typography variant="h6" sx={{ pl: 1 }}>Your Reservation:</Typography>
+                <TableContainer sx={{ height: 900, width: '100%' }}>
+                    <Paper sx={{ height: 400, maxWidth: 900 }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            initialState={{ pagination: { paginationModel } }}
+                            pageSizeOptions={[5, 10]}
+                            checkboxSelection
+                            sx={{ border: 0 }}
+                        />
+                    </Paper>
+                </TableContainer>
+
+            </Box>
         </>
     )
 }

@@ -8,12 +8,12 @@ function UserProfileComponent() {
     }
     return (
         <>
-            <Box>
-                <Typography variant="h2">My Account</Typography>
-                <Typography variant="subtitle1">{user.id}</Typography>
-                <Typography variant="subtitle1">{user.email}</Typography>
-                <Typography variant="subtitle1">{user.username}</Typography>
-                <Typography variant="subtitle1">{user.role}</Typography>
+            <Box sx={{ mb: 2, pl: 1 }}>
+                <Typography sx={{ mb: 1, fontSize: '2rem' }}>Hi {user.username}!</Typography>
+                <Box sx={{}}>
+                    <Typography variant="subtitle1" sx={{ mb: 1 }}>Email: {user.email}</Typography>
+                    <Typography variant="subtitle1">Username: {user.username}</Typography>
+                </Box>
             </Box>
 
 
