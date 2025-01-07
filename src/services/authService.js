@@ -2,6 +2,16 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import axiosInstance, { API_URL, handleError } from "./axiosInstance";
 
+
+export const getHomePage = async () => {
+    try {
+        const res = await axiosInstance(`/`);
+        return res.data;
+    } catch (error) {
+        return handleError(error, "Cannot load Home Page");
+    }
+}
+
 export const login = async (data) => {
     try {
         //axios makes data from object -> JSON

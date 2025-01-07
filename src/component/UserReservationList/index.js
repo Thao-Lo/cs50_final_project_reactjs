@@ -10,6 +10,8 @@ function UserReservationList() {
     const { state: { user } } = useUser();
     const { state: { error }, dispatch } = useReservation();
     const [reservationList, setReservationList] = useState([]);
+    const [paginationModel, serPaginationModel] = useState({ page: 0, pageSize: 5 })
+    const [totalRows, setTotalRows] = useState(0);
 
     const columns = [
         { field: 'id', headerName: 'No', width: 100 },
@@ -19,24 +21,28 @@ function UserReservationList() {
         { field: 'time', headerName: 'Time', width: 110 },
         { field: 'status', headerName: 'Status', sortable: false, width: 110 },
     ];
+
     const fetchUserReservationList = async () => {
-        const result = await retrieveUserReservationList(user.id);
+        const result = await retrieveUserReservationList(user.id, paginationModel.page, paginationModel.pageSize);
         if (result.error) {
             dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage: result.message } })
             return;
         }
         console.log(result);
         setReservationList(result.reservationList);
+        setTotalRows(result.totalRows)
     }
+
     useEffect(() => {
         if (user) {
             fetchUserReservationList();
         }
-    }, [user])
+    }, [paginationModel,user])
+
     console.log("reservationList", reservationList);
 
     const rows = reservationList && reservationList.map(({ tableName, capacity, date, time, status }, index) => ({
-        id: index + 1,
+        id: paginationModel.page * paginationModel.pageSize + index + 1,
         tableName,
         capacity,
         date,
@@ -45,8 +51,11 @@ function UserReservationList() {
     })
     );
     console.log(rows);
+    const handlePaginationChange = (newModel) => {
+        serPaginationModel(newModel);
+    }
+    // const paginationModel = { page: 0, pageSize: 5 };
 
-    const paginationModel = { page: 0, pageSize: 5 };
     if (!user) {
         return <Typography variant="subtitle1">Loading user profile...</Typography>;
     }
@@ -59,8 +68,12 @@ function UserReservationList() {
                         <DataGrid
                             rows={rows}
                             columns={columns}
-                            initialState={{ pagination: { paginationModel } }}
+                            rowCount={totalRows}
+                            pagination
+                            paginationMode="server"
                             pageSizeOptions={[5, 10]}
+                            onPaginationModelChange={handlePaginationChange}
+                            paginationModel={paginationModel}
                             checkboxSelection
                             sx={{ border: 0 }}
                         />
