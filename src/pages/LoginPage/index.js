@@ -4,9 +4,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import LoginForm from "../../component/LoginForm";
 import { login } from "../../services/authService";
 import { USER_ACTION, useUser } from "../../hooks/UserContext";
+import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
 
 function LoginPage() {
     const { state: { error }, dispatch } = useUser();
+    const { state: { sessionId }, dispatch: reservationDispatch } = useReservation();
     const [authentication, setAuthentication] = useState({
         usernameOrEmail: '',
         password: ''
@@ -39,6 +41,13 @@ function LoginPage() {
         } else {
             dispatch({ type: USER_ACTION.LOGIN, payload: result.user })
             dispatch({ type: USER_ACTION.AUTH_MESSAGE, payload: result.message })
+            const storedSessionId = sessionStorage.getItem('sessionId');
+            console.log("login session id:" + storedSessionId);
+            if (storedSessionId) {
+                reservationDispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: {sessionId: storedSessionId} })
+                sessionStorage.removeItem('sessionId');
+            }
+
             setIsLoading(false)
             navigate(result.user.role === "ADMIN" ? '/admin' : '/')
         }

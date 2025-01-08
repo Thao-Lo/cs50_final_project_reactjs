@@ -1,16 +1,15 @@
-import dayjs, { utc } from "dayjs";
-import timezone from 'dayjs/plugin/timezone'
-import BookingComponent from "../../component/BookingComponent";
-import { useEffect, useState } from "react";
 import { Box, Paper } from "@mui/material";
-import { getSlots } from "../../services/bookingService";
-import SlotComponent from "../../component/SlotComponent";
-import ConfirmBookingDialog from "../../component/ConfirmBookingDialog";
-import { createReservation } from "../../services/reservationService";
-import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
+import dayjs, { utc } from "dayjs";
+import timezone from 'dayjs/plugin/timezone';
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SensorsOutlined } from "@mui/icons-material";
-import CountdownTimer from "../../component/CountdownTimer";
+import BookingComponent from "../../component/BookingComponent";
+import ConfirmBookingDialog from "../../component/ConfirmBookingDialog";
+import SlotComponent from "../../component/SlotComponent";
+import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
+import { useUser } from "../../hooks/UserContext";
+import { getSlots } from "../../services/bookingService";
+import { createReservation } from "../../services/reservationService";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -19,6 +18,7 @@ dayjs.extend(timezone)
 function BookingPage() {
 
     const { state: slot, dispatch } = useReservation();
+    const { state: { isAuthenticated } } = useUser();
 
     const [bookingValues, setBookingValues] = useState({
         capacity: '',
@@ -59,15 +59,21 @@ function BookingPage() {
         console.log("result", result);
         console.log("TTL: " + result.remainingTime);
         console.log(typeof (result.remainingTime));
+        if (isAuthenticated) {
+            dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime } });
+            dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });    
+            navigate('/user/reservation')       
+        } else {
+            const existingSessionId = sessionStorage.getItem('sessionId');
+            if (existingSessionId) {
+                sessionStorage.removeItem('sessionId')
+            }
+            sessionStorage.setItem('sessionId', result.sessionId)
+            navigate('/login')
+        }
+       
 
-        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime } });
-        dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
-
-        navigate('/user/reservation')
     }
-
-
-
 
     //for capacity and time - Booking component
     const handleInputChange = (e) => {
@@ -112,7 +118,7 @@ function BookingPage() {
     const slotList = (slots.length > 0) ?
         (Object.keys(groupSlots).map((date) => (
             <Box key={date}>
-                <Box sx={{ m: 1, fontWeight: 'bold', textDecoration:'underline' }}>{date}</Box>
+                <Box sx={{ m: 1, fontWeight: 'bold', textDecoration: 'underline' }}>{date}</Box>
                 <Box sx={{
                     display: 'flex', gap: '0.5rem',
                     overflow: 'auto',

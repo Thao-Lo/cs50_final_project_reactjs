@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import ProductPage from './pages/ProductPage';
 import RegisterPage from './pages/RegisterPage';

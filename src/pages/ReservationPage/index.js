@@ -8,12 +8,12 @@ import PaymentLayout from "../../stripe/PaymentLayout";
 import { useStripeContext } from "../../stripe/StripeContext";
 
 function ReservationPage() {
-    const { state: { selectedSlot, countdown, sessionId, error }, dispatch } = useReservation();
-    const { setClientSecret, setPaymentIntentId, clientSecret } = useStripeContext();
+    const { state: { selectedSlot, sessionId, error }, dispatch } = useReservation();
+    const { setClientSecret, setPaymentIntentId } = useStripeContext();
     const [paymentError, setPaymentError] = useState(null)   
     const prevSessionId = useRef();
 
-    // console.log("selectedSlot", selectedSlot);
+    console.log("reservation page, sessionId ", sessionId);
     // console.log("countdown", countdown);
     const fetchReservationInfo = async () => {
         if (!sessionId) {

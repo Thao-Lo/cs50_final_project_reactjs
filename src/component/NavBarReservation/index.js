@@ -24,6 +24,10 @@ const pages = [{
     label: 'Booking'
 },
 {
+    route: 'user/reservation',
+    label: 'Reservation'
+},
+{
     route: '/admin/dashboard',
     label: 'Dashboard'
 }, {
@@ -58,7 +62,7 @@ function NavBarReservation() {
     const getFilteredPages = () => {
         //if user not login
         if (!isAuthenticated) {
-            return pages.filter(({ label }) => !['My Account', 'Dashboard', 'Logout'].includes(label))
+            return pages.filter(({ label }) => !['My Account','Reservation', 'Dashboard', 'Logout'].includes(label))
         }
         //if user login and have role "ADMIN"
         if (user?.role === 'ADMIN') {
