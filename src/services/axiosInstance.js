@@ -21,6 +21,7 @@ axiosInstance.interceptors.request.use(
                 })
                 const accessToken = await res.data.accessToken;
                 Cookies.set('accessToken', accessToken, { expires: 1 / 24 })
+                window.dispatchEvent(new Event('accessTokenUpdated'));
                 config.headers.Authorization = `Bearer ${accessToken}`
             } catch (error) {
                 console.log("Failed refresh Token");
@@ -57,6 +58,7 @@ axiosInstance.interceptors.response.use(
                     const accessToken = await res.data.accessToken;
 
                     Cookies.set('accessToken', accessToken, { expires: 1 / 24 });
+                    window.dispatchEvent(new Event('accessTokenUpdated'));
                     //add new accessToken to error config 
                     error.config.headers.Authorization = `Bearer ${accessToken}`
                     // and send original request back to be with valid authorization

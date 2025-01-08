@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import Cookies from 'js-cookie';
 import { getUserbyAccessToken } from "../services/authService";
 
@@ -19,21 +19,38 @@ export const USER_ACTION = {
 
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(UserReducer, initialState)
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchUserProfile = async () => {
+        setIsLoading(true);
         const result = await getUserbyAccessToken();
         if (result.error) {
             dispatch({ type: USER_ACTION.AUTH_ERROR, payload: result.message })
             return;
         }
+
         dispatch({ type: USER_ACTION.LOGIN, payload: result.user })
+        setIsLoading(false);
     }
 
     useEffect(() => {
         if (Cookies.get('accessToken')) {
             fetchUserProfile();
+        } else {
+            setIsLoading(false);
         }
     }, [])
+    useEffect(() => {
+        const handleAccessTokenUpdate = () => {
+            console.log('accessToken has been updated in cookies!');
+            fetchUserProfile();
+        };
+        window.addEventListener('accessTokenUpdated', handleAccessTokenUpdate);
+        return () => {
+            window.removeEventListener('accessTokenUpdated', handleAccessTokenUpdate);
+        }
+
+    },[])
 
     return (
         <UserContext.Provider value={{ state, dispatch }}>

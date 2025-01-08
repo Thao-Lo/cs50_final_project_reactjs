@@ -34,10 +34,12 @@ function LoginPage() {
         setIsLoading(true)
         const result = await login(authentication)
         console.log("login result:", result);
+        
         if (result.error) {
             dispatch({ type: USER_ACTION.AUTH_ERROR, payload: result.message })
             setIsLoading(false)
             return;
+
         } else {
             dispatch({ type: USER_ACTION.LOGIN, payload: result.user })
             dispatch({ type: USER_ACTION.AUTH_MESSAGE, payload: result.message })
