@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box, Container, Paper } from "@mui/material";
 import dayjs, { utc } from "dayjs";
 import timezone from 'dayjs/plugin/timezone';
 import { useEffect, useState } from "react";
@@ -61,10 +61,10 @@ function BookingPage() {
         console.log(typeof (result.remainingTime));
         if (isAuthenticated) {
             //clean up redis
-            if(sessionId){
+            if (sessionId) {
                 handleDeleteRedisForNonProcessingBooking(sessionId);
-            }          
-            dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime } });
+            }
+            dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime - 1 } });
             dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
             navigate('/user/reservation')
         } else {
@@ -165,15 +165,17 @@ function BookingPage() {
 
 
     return (
-        <Box sx={{ margin: 2, padding: 2, maxWidth: 1200, maxheight: 900 }} component={Paper}>
-            <BookingComponent bookingValues={bookingValues} handleDateChange={handleDateChange} handleInputChange={handleInputChange}
-            />
-            <Box sx={{}}>
-                {slotList}
-            </Box>
-            <ConfirmBookingDialog handleClose={handleClose} open={open} slot={selectedSlot} handleSelectedSlot={handleSelectedSlot} />
+        <Container maxWidth="lg">
+            <Box sx={{ margin: 2, padding: 2, maxWidth: 1200, maxheight: 900 }} component={Paper}>
+                <BookingComponent bookingValues={bookingValues} handleDateChange={handleDateChange} handleInputChange={handleInputChange}
+                />
+                <Box sx={{}}>
+                    {slotList}
+                </Box>
+                <ConfirmBookingDialog handleClose={handleClose} open={open} slot={selectedSlot} handleSelectedSlot={handleSelectedSlot} />
 
-        </Box >
+            </Box >
+        </Container>
     )
 
 }

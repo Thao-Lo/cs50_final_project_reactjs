@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import LoginForm from "../../component/LoginForm";
@@ -34,7 +34,7 @@ function LoginPage() {
         setIsLoading(true)
         const result = await login(authentication)
         console.log("login result:", result);
-        
+
         if (result.error) {
             dispatch({ type: USER_ACTION.AUTH_ERROR, payload: result.message })
             setIsLoading(false)
@@ -46,7 +46,7 @@ function LoginPage() {
             const storedSessionId = sessionStorage.getItem('sessionId');
             console.log("login session id:" + storedSessionId);
             if (storedSessionId) {
-                reservationDispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: {sessionId: storedSessionId} })
+                reservationDispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: storedSessionId } })
                 sessionStorage.removeItem('sessionId');
             }
 
@@ -57,18 +57,20 @@ function LoginPage() {
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
-            {isLoading ?
-                (<Box sx={{ display: 'flex' }}>
-                    <CircularProgress />
-                </Box>) :
-                (
-                    <>
-                        <LoginForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
-                        <Typography component={NavLink} to={'/register'}>Not Register yet? Click here</Typography>
-                    </>
-                )}
-        </Box>
+        <Container maxWidth='lg'>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', height:'90vh'}}>
+                {isLoading ?
+                    (<Box sx={{ display: 'flex' }}>
+                        <CircularProgress />
+                    </Box>) :
+                    (
+                        <>
+                            <LoginForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
+                            <Typography component={NavLink} to={'/register'}>Not Register yet? Click here</Typography>
+                        </>
+                    )}
+            </Box>
+        </Container>
 
     )
 }

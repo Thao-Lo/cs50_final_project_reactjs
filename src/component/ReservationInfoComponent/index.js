@@ -8,31 +8,32 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import HistoryToggleOffOutlinedIcon from '@mui/icons-material/HistoryToggleOffOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import BrunchDiningOutlinedIcon from '@mui/icons-material/BrunchDiningOutlined';
+import { Link } from 'react-router-dom';
 
-function ReservationInfoComponent({selectedSlot}) {
+function ReservationInfoComponent({ selectedSlot }) {
 
     return (
-        <Card sx={{ minWidth: 275 ,maxWidth: 400}}>
-            <CardContent sx={{ml: 2}}>
-                <Typography variant="h5" component="div" sx={{mb: 1}}>
+        <Card sx={{ minWidth: { xs: 275, sm: 450 }, maxWidth: 450, p: '1.25rem' }}>
+            <CardContent sx={{ ml: 2 }}>
+                <Typography variant="h5" component="div" sx={{ mb: 1 }}>
                     Zavis restaurant
                 </Typography>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14, mb: 2 }}>
                     Your reservation Information
                 </Typography>
-                <Typography sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
+                <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <CalendarMonthOutlinedIcon />
                     {selectedSlot.date}
                 </Typography>
-                <Typography variant="body2" sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
+                <Typography variant="body2" sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <HistoryToggleOffOutlinedIcon />
                     {selectedSlot.time}
                 </Typography>
-                <Typography variant="body2" sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
-                    <BrunchDiningOutlinedIcon/>
+                <Typography variant="body2" sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <BrunchDiningOutlinedIcon />
                     {'Dinner -'}{selectedSlot.tableName}
                 </Typography>
-                <Typography sx={{ mb: 1.5, display:'flex', alignItems: 'center', gap: '0.5rem'}}>
+                <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <GroupOutlinedIcon />
                     {'Party of '}{selectedSlot.capacity}
                 </Typography>
@@ -40,7 +41,12 @@ function ReservationInfoComponent({selectedSlot}) {
 
             </CardContent>
             <CardActions>
-                <Button size="small">Learn More</Button>
+                <Button size="small">
+                    <Link to="/booking" style={{
+                        textDecoration: "none", 
+                        color: "inherit", 
+                    }}> Change Booking</Link>
+                </Button>
             </CardActions>
         </Card>
 

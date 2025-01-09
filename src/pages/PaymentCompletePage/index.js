@@ -4,7 +4,8 @@ import PaymentCompleteComponent from "../../stripe/PaymentCompleteComponent";
 import PaymentLayout from "../../stripe/PaymentLayout";
 import { useStripeContext } from "../../stripe/StripeContext";
 import { confirmReservation } from "../../services/reservationService";
-import { Box } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function PaymentCompletePage() {
     const { setClientSecret, paymentIntentId } = useStripeContext();
@@ -35,21 +36,30 @@ function PaymentCompletePage() {
             }
             console.log(result);
             setMessage(result)
-        }else{
+        } else {
             setError("Missing required parameters.")
         }
 
     }
-    useEffect(() => {       
-            fetchConfirmReservation();        
-    }, [paymentIntentId,sessionIdParam])
+    useEffect(() => {
+        fetchConfirmReservation();
+    }, [paymentIntentId, sessionIdParam])
 
     return (
         <>
-            <PaymentLayout>
-                <PaymentCompleteComponent />
-            </PaymentLayout>
-
+            <Container maxWidth="lg" sx={{ p: { xs: 1  } }}>
+                <Box sx={{mb: 2}}>
+                    <PaymentLayout>
+                        <PaymentCompleteComponent />
+                    </PaymentLayout>
+                </Box>
+                <Box>
+                    <Box sx={{mb: 2}}>{message ? message : error}</Box>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        <Link to="/user/profile">Click to Check your reservation</Link>
+                    </Typography>
+                </Box>
+            </Container>
 
         </>
     )

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import RegisterForm from "../../component/RegisterForm";
 import { register } from "../../services/authService";
@@ -30,15 +30,17 @@ function RegisterPage() {
             setError(result.message)
         } else {
             navigate(`/verify-email?email=${authentication.email}`)
-        }       
+        }
 
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
-            <RegisterForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
-            <Typography component={NavLink} to={'/login'}>Already have account? Click to Login</Typography>
-        </Box>
+        <Container maxWidth="lg">
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', height: '90vh' }}>
+                <RegisterForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
+                <Typography component={NavLink} to={'/login'}>Already have account? Click to Login</Typography>
+            </Box>
+        </Container>
     )
 
 }

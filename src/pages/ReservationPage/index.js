@@ -6,14 +6,19 @@ import { createPayment, retrieveReservationInfo } from "../../services/reservati
 import CheckoutForm from "../../stripe/CheckoutForm";
 import PaymentLayout from "../../stripe/PaymentLayout";
 import { useStripeContext } from "../../stripe/StripeContext";
+import { Box, Card, CardActions, CardContent, CardMedia, Chip, Container, Paper, Typography } from "@mui/material";
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import MapComponent from "../../component/MapComponent";
+import { Link } from "react-router-dom";
+import DuckImage from '../../static/images/duck.jpg'
 
 function ReservationPage() {
     const { state: { selectedSlot, sessionId, error }, dispatch } = useReservation();
     const { setClientSecret, setPaymentIntentId } = useStripeContext();
-    const [paymentError, setPaymentError] = useState(null)   
+    const [paymentError, setPaymentError] = useState(null)
     const prevSessionId = useRef();
 
-    console.log("reservation page, sessionId ", sessionId);
+
     // console.log("countdown", countdown);
     const fetchReservationInfo = async () => {
         if (!sessionId) {
@@ -27,7 +32,7 @@ function ReservationPage() {
         console.log("Result reservation", result.reservation)
 
         dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: { selectedSlot: result.reservation } });
-        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime } });
+        // dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime }});
     }
     const fetchCreatePayment = async () => {
         console.log("sessionId payment: " + sessionId);
@@ -50,32 +55,70 @@ function ReservationPage() {
     useEffect(() => {
         console.log("CHANGED");
         if (sessionId && prevSessionId.current != sessionId) {
-        prevSessionId.current = sessionId;
+            prevSessionId.current = sessionId;
             fetchCreatePayment();
-        }  
-       
+        }
+
     }, [sessionId])
 
-    if (!selectedSlot) {
-        return <div>No Slot Selected {error}</div>; // Xử lý nếu chưa có dữ liệu
-    }
+    // if (!selectedSlot) {
+    //     return <div>No Slot Selected {error}</div>; // Xử lý nếu chưa có dữ liệu
+    // }
     if (paymentError) {
         return <div>{paymentError}</div>
     }
 
     return (
         <>
-            <CountdownTimer />
-            {selectedSlot ? (
-                <>
-                    <ReservationInfoComponent key={selectedSlot.id} selectedSlot={selectedSlot} />
-                    <PaymentLayout>
-                        <CheckoutForm />
-                    </PaymentLayout>
-                </>
-            ) : (
-                <p>No slot selected</p>
-            )}
+            <Container maxWidth="lg" sx={{ p: { xs: 1 } }}>
+                <Box sx={{ p: { xs: 1, sm: 3 } }}>
+                    {selectedSlot ? (
+                        <>
+                            <Box sx={{ mb: 2 }}>
+                                <Chip icon={<AccessAlarmsIcon />} label={<CountdownTimer />} variant="outlined" />
+                            </Box>
+                            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                    <Box>
+                                        <ReservationInfoComponent key={selectedSlot.id} selectedSlot={selectedSlot} />
+                                    </Box>
+                                    <Box>
+                                        <MapComponent />
+                                    </Box>
+                                </Box>
+                                <Box>
+                                    <PaymentLayout>
+                                        <CheckoutForm />
+                                    </PaymentLayout>
+
+                                </Box>
+                            </Box>
+                        </>
+                    ) : (
+                        <Box sx={{ p: 3 }}>
+                            <Card sx={{ maxWidth: 380 }}>
+                                <CardMedia
+                                    sx={{ height: 240}}
+                                    image={DuckImage}
+                                    title="green iguana"
+                                />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        No Slot Selected {error}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                        <Link to="/booking">Click here to make a booking with us</Link>
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+
+
+                        </Box>
+
+
+                    )}
+                </Box >
+            </Container>
 
         </>
 

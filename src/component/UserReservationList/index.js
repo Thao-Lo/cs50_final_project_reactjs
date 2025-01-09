@@ -64,7 +64,7 @@ function UserReservationList() {
             <Box>
                 <Typography variant="h6" sx={{ pl: 1 }}>Your Reservation:</Typography>
                 <TableContainer sx={{ height: 900, width: '100%' }}>
-                    <Paper sx={{ height: 400, maxWidth: 900 }}>
+                    <Paper sx={{ height: 400, maxWidth: 1000 }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}
