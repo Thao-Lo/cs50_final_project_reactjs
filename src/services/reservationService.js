@@ -9,6 +9,18 @@ export const createReservation = async (slot) => {
         return handleError(error, 'Slot is temporary unavailable')
     }
 }
+export const deleteRedisForNonProcessingBooking = async (sessionId) => {
+    try {
+        const res = await axiosInstance.delete(`/reservation/delete-redis-key`, {
+            params: {
+                sessionId: sessionId
+            }
+        })
+        return res.data;
+    } catch (error){
+        return handleError(error, "Failed to release the slot")
+    }
+}
 
 export const retrieveReservationInfo = async (sessionId) => {
     try {

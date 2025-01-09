@@ -9,7 +9,7 @@ import SlotComponent from "../../component/SlotComponent";
 import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
 import { useUser } from "../../hooks/UserContext";
 import { getSlots } from "../../services/bookingService";
-import { createReservation } from "../../services/reservationService";
+import { createReservation, deleteRedisForNonProcessingBooking } from "../../services/reservationService";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -17,7 +17,7 @@ dayjs.extend(timezone)
 
 function BookingPage() {
 
-    const { state: slot, dispatch } = useReservation();
+    const { state: { slot, sessionId }, dispatch } = useReservation();
     const { state: { isAuthenticated } } = useUser();
 
     const [bookingValues, setBookingValues] = useState({
@@ -60,19 +60,31 @@ function BookingPage() {
         console.log("TTL: " + result.remainingTime);
         console.log(typeof (result.remainingTime));
         if (isAuthenticated) {
+            //clean up redis
+            if(sessionId){
+                handleDeleteRedisForNonProcessingBooking(sessionId);
+            }          
             dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime } });
-            dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });    
-            navigate('/user/reservation')       
+            dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
+            navigate('/user/reservation')
         } else {
             const existingSessionId = sessionStorage.getItem('sessionId');
             if (existingSessionId) {
-                sessionStorage.removeItem('sessionId')
+                //clean up Redis               
+                sessionStorage.removeItem('sessionId');
+                handleDeleteRedisForNonProcessingBooking(existingSessionId);
             }
             sessionStorage.setItem('sessionId', result.sessionId)
             navigate('/login')
         }
-       
-
+    }
+    const handleDeleteRedisForNonProcessingBooking = async (sessionId) => {
+        const res = await deleteRedisForNonProcessingBooking(sessionId)
+        if (res.error) {
+            console.log("Error" + res.message);
+            return;
+        }
+        console.log("Delete Redis response: " + res.message);
     }
 
     //for capacity and time - Booking component
