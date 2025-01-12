@@ -17,7 +17,7 @@ function ReservationPage() {
     const { setClientSecret, setPaymentIntentId } = useStripeContext();
     const [paymentError, setPaymentError] = useState(null)
     const prevSessionId = useRef();
-
+    const hasFetchedPayment = useRef(false);
 
     // console.log("countdown", countdown);
     const fetchReservationInfo = async () => {
@@ -32,14 +32,17 @@ function ReservationPage() {
         console.log("Result reservation", result.reservation)
 
         dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: { selectedSlot: result.reservation } });
-        // dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime }});
+        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime -1}});
     }
+
+    //useCallback use to remember function, object reference to avoid reRender the same reference
     const fetchCreatePayment = useCallback(async () => {
         console.log("sessionId payment: " + sessionId);
 
         if (!sessionId) {
             return;
-        }
+        } 
+       
         const result = await createPayment(sessionId);
         if (result.error) {
             setPaymentError(result.message);
@@ -47,7 +50,8 @@ function ReservationPage() {
         }
         console.log("payment", result);
         setClientSecret(result.clientSecret)
-        setPaymentIntentId(result.paymentIntentId)
+        setPaymentIntentId(result.paymentIntentId)       
+
     }, [sessionId, setClientSecret, setPaymentIntentId]);
 
     useEffect(() => {
@@ -56,13 +60,25 @@ function ReservationPage() {
 
     useEffect(() => {
         console.log("CHANGED, sessionId" + sessionId);
+        const storedSessionId = sessionStorage.getItem('sessionId');
+       
+        if(sessionId === storedSessionId){
+            console.log("sessionId matches stored sessionId. Skipping fetchCreatePayment.");
+            return;
+        }
+        if(sessionId === storedSessionId){
+            console.log("sessionId matches stored sessionId. Skipping fetchCreatePayment.");
+            return;
+        }
         //avoid useEffect run 2 times in dev mode
         if (sessionId && prevSessionId.current != sessionId) {
+            hasFetchedPayment.current = true;
             prevSessionId.current = sessionId;
-            fetchCreatePayment();
+            sessionStorage.setItem('sessionId', sessionId)
+            fetchCreatePayment();           
         }
 
-    }, [fetchCreatePayment])
+    }, [sessionId, fetchCreatePayment])
 
     // if (!selectedSlot) {
     //     return <div>No Slot Selected {error}</div>; // Xử lý nếu chưa có dữ liệu
@@ -93,7 +109,6 @@ function ReservationPage() {
                                     <PaymentLayout>
                                         <CheckoutForm />
                                     </PaymentLayout>
-
                                 </Box>
                             </Box>
                         </>
@@ -114,11 +129,7 @@ function ReservationPage() {
                                     </Typography>
                                 </CardContent>
                             </Card>
-
-
                         </Box>
-
-
                     )}
                 </Box >
             </Container>

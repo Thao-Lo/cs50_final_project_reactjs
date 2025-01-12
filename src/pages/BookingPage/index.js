@@ -59,16 +59,18 @@ function BookingPage() {
         }
         console.log("result", result);
         console.log("TTL: " + result.remainingTime);
-        console.log(typeof (result.remainingTime));
+      
         if (isAuthenticated) {
             //clean up redis
             if (sessionId) {
-                handleDeleteRedisForNonProcessingBooking(sessionId);
+                sessionStorage.removeItem('sessionId');
+                await handleDeleteRedisForNonProcessingBooking(sessionId);
                 setClientSecret('');
                 setPaymentIntentId('')
             }
-            dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime - 1 } });
+            // dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime - 1 } });
             dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
+          
             navigate('/user/reservation')
         } else {
             const existingSessionId = sessionStorage.getItem('sessionId');
@@ -83,6 +85,7 @@ function BookingPage() {
             navigate('/login')
         }
     }
+   
     const handleDeleteRedisForNonProcessingBooking = async (sessionId) => {
         const res = await deleteRedisForNonProcessingBooking(sessionId)
         if (res.error) {
@@ -157,9 +160,9 @@ function BookingPage() {
                 }}>
                     {
                         groupSlots[date].map((slot) => (
-                            <>
+                            <Box key={slot.id}>
                                 <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />
-                            </>
+                            </Box>
                         ))
                     }
                 </Box>
