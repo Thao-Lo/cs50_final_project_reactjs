@@ -10,6 +10,7 @@ import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationConte
 import { useUser } from "../../hooks/UserContext";
 import { getSlots } from "../../services/bookingService";
 import { createReservation, deleteRedisForNonProcessingBooking } from "../../services/reservationService";
+import { useStripeContext } from "../../stripe/StripeContext";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -19,7 +20,7 @@ function BookingPage() {
 
     const { state: { slot, sessionId }, dispatch } = useReservation();
     const { state: { isAuthenticated } } = useUser();
-
+    const { setClientSecret, setPaymentIntentId } = useStripeContext();
     const [bookingValues, setBookingValues] = useState({
         capacity: '',
         date: dayjs.tz(new Date(), "Australia/Sydney"),
@@ -63,6 +64,8 @@ function BookingPage() {
             //clean up redis
             if (sessionId) {
                 handleDeleteRedisForNonProcessingBooking(sessionId);
+                setClientSecret('');
+                setPaymentIntentId('')
             }
             dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime - 1 } });
             dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
@@ -73,6 +76,8 @@ function BookingPage() {
                 //clean up Redis               
                 sessionStorage.removeItem('sessionId');
                 handleDeleteRedisForNonProcessingBooking(existingSessionId);
+                setClientSecret('');
+                setPaymentIntentId('')
             }
             sessionStorage.setItem('sessionId', result.sessionId)
             navigate('/login')

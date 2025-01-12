@@ -8,7 +8,7 @@ import { Box, Container, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 function PaymentCompletePage() {
-    const { setClientSecret, paymentIntentId } = useStripeContext();
+    const { setClientSecret, paymentIntentId, setPaymentIntentId } = useStripeContext();
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
 
@@ -35,7 +35,11 @@ function PaymentCompletePage() {
                 return;
             }
             console.log(result);
-            setMessage(result)
+            setMessage(result.message)
+            setError(null)
+            setClientSecret('');
+            setPaymentIntentId('')
+
         } else {
             setError("Missing required parameters.")
         }

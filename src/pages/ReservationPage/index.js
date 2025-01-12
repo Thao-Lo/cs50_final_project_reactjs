@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CountdownTimer from "../../component/CountdownTimer";
 import ReservationInfoComponent from "../../component/ReservationInfoComponent";
 import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
@@ -34,8 +34,9 @@ function ReservationPage() {
         dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: { selectedSlot: result.reservation } });
         // dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime }});
     }
-    const fetchCreatePayment = async () => {
+    const fetchCreatePayment = useCallback(async () => {
         console.log("sessionId payment: " + sessionId);
+
         if (!sessionId) {
             return;
         }
@@ -47,19 +48,21 @@ function ReservationPage() {
         console.log("payment", result);
         setClientSecret(result.clientSecret)
         setPaymentIntentId(result.paymentIntentId)
-    }
+    }, [sessionId, setClientSecret, setPaymentIntentId]);
+
     useEffect(() => {
         fetchReservationInfo();
     }, [sessionId])
 
     useEffect(() => {
-        console.log("CHANGED");
+        console.log("CHANGED, sessionId" + sessionId);
+        //avoid useEffect run 2 times in dev mode
         if (sessionId && prevSessionId.current != sessionId) {
             prevSessionId.current = sessionId;
             fetchCreatePayment();
         }
 
-    }, [sessionId])
+    }, [fetchCreatePayment])
 
     // if (!selectedSlot) {
     //     return <div>No Slot Selected {error}</div>; // Xử lý nếu chưa có dữ liệu
@@ -98,7 +101,7 @@ function ReservationPage() {
                         <Box sx={{ p: 3 }}>
                             <Card sx={{ maxWidth: 380 }}>
                                 <CardMedia
-                                    sx={{ height: 240}}
+                                    sx={{ height: 240 }}
                                     image={DuckImage}
                                     title="green iguana"
                                 />
