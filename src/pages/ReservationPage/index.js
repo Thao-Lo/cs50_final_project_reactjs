@@ -16,8 +16,7 @@ function ReservationPage() {
     const { state: { selectedSlot, sessionId, error }, dispatch } = useReservation();
     const { setClientSecret, setPaymentIntentId } = useStripeContext();
     const [paymentError, setPaymentError] = useState(null)
-    const prevSessionId = useRef();
-    const hasFetchedPayment = useRef(false);
+    const prevSessionId = useRef();   
 
     // console.log("countdown", countdown);
     const fetchReservationInfo = async () => {
@@ -27,12 +26,13 @@ function ReservationPage() {
         const result = await retrieveReservationInfo(sessionId);
         if (result.error) {
             dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage: result.message } })
+            dispatch({ type: RESERVATION_ACTION.RESET_STATE })
             return;
         }
         console.log("Result reservation", result.reservation)
+        dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: { selectedSlot: result.reservation } });       
+        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime - 1 } });     
 
-        dispatch({ type: RESERVATION_ACTION.SET_SLOT, payload: { selectedSlot: result.reservation } });
-        dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime -1}});
     }
 
     //useCallback use to remember function, object reference to avoid reRender the same reference
@@ -41,8 +41,8 @@ function ReservationPage() {
 
         if (!sessionId) {
             return;
-        } 
-       
+        }
+
         const result = await createPayment(sessionId);
         if (result.error) {
             setPaymentError(result.message);
@@ -50,7 +50,7 @@ function ReservationPage() {
         }
         console.log("payment", result);
         setClientSecret(result.clientSecret)
-        setPaymentIntentId(result.paymentIntentId)       
+        setPaymentIntentId(result.paymentIntentId)
 
     }, [sessionId, setClientSecret, setPaymentIntentId]);
 
@@ -61,21 +61,16 @@ function ReservationPage() {
     useEffect(() => {
         console.log("CHANGED, sessionId" + sessionId);
         const storedSessionId = sessionStorage.getItem('sessionId');
-       
-        if(sessionId === storedSessionId){
+
+        if (sessionId === storedSessionId) {
             console.log("sessionId matches stored sessionId. Skipping fetchCreatePayment.");
             return;
-        }
-        if(sessionId === storedSessionId){
-            console.log("sessionId matches stored sessionId. Skipping fetchCreatePayment.");
-            return;
-        }
+        }      
         //avoid useEffect run 2 times in dev mode
-        if (sessionId && prevSessionId.current != sessionId) {
-            hasFetchedPayment.current = true;
+        if (sessionId && prevSessionId.current != sessionId) {       
             prevSessionId.current = sessionId;
             sessionStorage.setItem('sessionId', sessionId)
-            fetchCreatePayment();           
+            fetchCreatePayment();
         }
 
     }, [sessionId, fetchCreatePayment])

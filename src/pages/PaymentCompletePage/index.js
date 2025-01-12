@@ -39,7 +39,7 @@ function PaymentCompletePage() {
             setError(null)
             setClientSecret('');
             setPaymentIntentId('')
-
+            sessionStorage.removeItem('sessionId');
         } else {
             setError("Missing required parameters.")
         }
