@@ -30,7 +30,7 @@ function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `http://localhost:3000/user/reservation/payment-complete?sessionId=${sessionId}`
+        return_url: `http://localhost:3000/user/reservation/payment-complete`
       },
     });
 

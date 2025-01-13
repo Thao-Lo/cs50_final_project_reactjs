@@ -12,13 +12,12 @@ function PaymentCompletePage() {
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
 
-    const clientSecret = new URLSearchParams(window.location.search).get(
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const clientSecret = urlParams.get(
         "payment_intent_client_secret"
     );
-    const sessionIdParam = new URLSearchParams(window.location.search).get(
-        "sessionId"
-    );
-    console.log(sessionIdParam);
+    const redirectStatus = urlParams.get('redirect_status');
 
     useEffect(() => {
         if (clientSecret) {
@@ -28,15 +27,17 @@ function PaymentCompletePage() {
 
 
     const fetchConfirmReservation = async () => {
-        if (sessionIdParam && paymentIntentId) {
-            const result = await confirmReservation(sessionIdParam, paymentIntentId);
+        const storedSessionId = sessionStorage.getItem('sessionId');
+        console.log("complete storedSessionId" + storedSessionId);
+        if (storedSessionId && paymentIntentId) {
+            const result = await confirmReservation(storedSessionId, paymentIntentId);
             if (result.error) {
                 setError(result.message)
                 return;
             }
             console.log(result);
             setMessage(result.message)
-            setError(null)
+            setError('')
             setClientSecret('');
             setPaymentIntentId('')
             sessionStorage.removeItem('sessionId');
@@ -46,19 +47,22 @@ function PaymentCompletePage() {
 
     }
     useEffect(() => {
-        fetchConfirmReservation();
-    }, [paymentIntentId, sessionIdParam])
+        const timer = setTimeout(() => {
+            fetchConfirmReservation();
+        }, 5000)
+        return () => clearInterval(timer)
+    }, [paymentIntentId])
 
     return (
         <>
-            <Container maxWidth="lg" sx={{ p: { xs: 1  } }}>
-                <Box sx={{mb: 2}}>
+            <Container maxWidth="lg" sx={{ p: { xs: 1 } }}>
+                <Box sx={{ mb: 2 }}>
                     <PaymentLayout>
                         <PaymentCompleteComponent />
                     </PaymentLayout>
                 </Box>
                 <Box>
-                    <Box sx={{mb: 2}}>{message ? message : error}</Box>
+                    <Box sx={{ mb: 2 }}>{message ? message : error}</Box>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         <Link to="/user/profile">Click to Check your reservation</Link>
                     </Typography>

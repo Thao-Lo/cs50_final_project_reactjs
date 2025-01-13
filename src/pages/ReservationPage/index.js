@@ -27,6 +27,8 @@ function ReservationPage() {
         if (result.error) {
             dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage: result.message } })
             dispatch({ type: RESERVATION_ACTION.RESET_STATE })
+            setPaymentIntentId(null);
+            setClientSecret('')
             return;
         }
         console.log("Result reservation", result.reservation)
