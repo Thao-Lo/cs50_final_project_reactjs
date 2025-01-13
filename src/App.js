@@ -13,6 +13,8 @@ import PaymentCompletePage from './pages/PaymentCompletePage';
 import NavBarReservation from './component/NavBarReservation';
 import { UserProvider } from './hooks/UserContext';
 import UserPage from './pages/UserPage';
+import RoleGuard from './component/RoleGuard';
+import DashboardLayoutAccount from './pages/AdminPage';
 
 
 function App() {
@@ -23,17 +25,27 @@ function App() {
           <BrowserRouter>
             <NavBarReservation />
             <Routes>
+              {/* Public Routes */}
               <Route path="/" element={<HomePage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="/booking" element={<BookingPage />} />
+
               <Route element={<AuthGuard />}>
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/verify-email" element={<EmailVerificationPage />} />
                 <Route path="/login" element={<LoginPage />} />
               </Route>
-              <Route path="*" element={<Navigate to="/" replace />} />
-              <Route path="/booking" element={<BookingPage />} />
-              <Route path='/user/reservation' element={<ReservationPage />} />
-              <Route path="/user/reservation/payment-complete" element={<PaymentCompletePage />} />
-              <Route path="/user/profile" element={<UserPage />} />
+
+              {/* User Routes*/}
+              <Route path="/user/*" element={<RoleGuard allowedRole={['USER']}/>}>
+                <Route path='reservation' element={<ReservationPage />} />
+                <Route path="reservation/payment-complete" element={<PaymentCompletePage />} />
+                <Route path="profile" element={<UserPage />} />
+              </Route>
+              <Route path="/admin/*" element={<RoleGuard allowedRole={['ADMIN']}/>}>
+                    <Route path="dashboard" element={<DashboardLayoutAccount />}/>
+              </Route>
+
             </Routes>
           </BrowserRouter>
         </ReservationProvider>
