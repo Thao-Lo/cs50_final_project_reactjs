@@ -15,6 +15,7 @@ import { UserProvider } from './hooks/UserContext';
 import UserPage from './pages/UserPage';
 import RoleGuard from './component/RoleGuard';
 import DashboardLayoutAccount from './pages/Admin/DashboardLayoutAccount';
+import UserManagementPage from './pages/Admin/UserManagementPage';
 
 
 function App() {
@@ -37,13 +38,16 @@ function App() {
               </Route>
 
               {/* User Routes*/}
-              <Route path="/user/*" element={<RoleGuard allowedRole={['USER']}/>}>
+              <Route path="/user/*" element={<RoleGuard allowedRole={['USER']} />}>
                 <Route path='reservation' element={<ReservationPage />} />
                 <Route path="reservation/payment-complete" element={<PaymentCompletePage />} />
                 <Route path="profile" element={<UserPage />} />
               </Route>
-              <Route path="/admin/*" element={<RoleGuard allowedRole={['ADMIN']}/>}>
-                    <Route path="dashboard" element={<DashboardLayoutAccount />}/>
+              <Route path="/admin/*" element={<RoleGuard allowedRole={['ADMIN']} />}>
+                <Route path="dashboard" element={<DashboardLayoutAccount />}>
+                  <Route path='user-management' element={<UserManagementPage />} />
+                  <Route path='*' element={<HomePage />}/>
+                </Route>
               </Route>
 
             </Routes>
