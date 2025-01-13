@@ -14,7 +14,7 @@ import NavBarReservation from './component/NavBarReservation';
 import { UserProvider } from './hooks/UserContext';
 import UserPage from './pages/UserPage';
 import RoleGuard from './component/RoleGuard';
-import DashboardLayoutAccount from './pages/AdminPage';
+import DashboardLayoutAccount from './pages/Admin/DashboardLayoutAccount';
 
 
 function App() {

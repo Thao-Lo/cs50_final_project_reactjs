@@ -66,7 +66,7 @@ function NavBarReservation() {
         }
         //if user login and have role "ADMIN"
         if (user?.role === 'ADMIN') {
-            return pages.filter(({ label }) => label !== 'Login' && label !== 'My Account')
+            return pages.filter(({ label }) => !['My Account','Reservation', 'Booking', 'Login'].includes(label))
         }
         //role "GUEST"
         return pages.filter(({ label }) => label !== 'Login' && label !== 'Dashboard')
