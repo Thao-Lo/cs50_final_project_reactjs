@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -28,8 +29,12 @@ function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleC
     };
 
     const handleOk = () => {
-        handleSubmitRoleChange(value);
-        onClose();
+        if(value !== valueProp){
+            handleSubmitRoleChange(value);           
+            onClose();
+        }else{
+            onClose();
+        }               
     };
 
     const handleChange = (event) => {
@@ -59,7 +64,7 @@ function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleC
                             label={option}
                         />
                     ))}
-                </RadioGroup>
+                </RadioGroup>             
             </DialogContent>
             <DialogActions>
                 <Button autoFocus onClick={handleCancel}>

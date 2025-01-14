@@ -7,29 +7,25 @@ export default function EditUserRoleButton({ id, value: valueProp, handleUpdateV
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(valueProp);
 
-   
     const handleClickListItem = () => {
         setOpen(true);
     };
 
-    const handleClose = (newValue) => {
+    const handleClose = () => {
         setOpen(false);
-
-        if (newValue) {
-            setValue(newValue);
-        }
         console.log("role:" + valueProp);
     };
     const handleSubmitRoleChange = async (changedValue) => {
         const result = await changeUserRole(id, changedValue);
         if (result.error) {
+            handleUpdateValueMessage({ text: result.message, type: "error" });
             console.log("update role error: " + result.message);
             return;
         }
-        handleUpdateValueMessage(result.message);
+        handleUpdateValueMessage({ text: result.message, type: "success" });
         console.log("update role: " + result.message);
     }
-     
+
     return (
         <>
             <Button variant="contained" size="small" onClick={handleClickListItem}>
