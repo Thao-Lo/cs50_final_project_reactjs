@@ -12,7 +12,7 @@ export const retrieveUserList = async (page, size) => {
         return res.data;
 
     } catch (error) {
-        return handleError(error, "React cannot fetch user list")
+        return handleError(error, "React: cannot fetch user list")
     }
 }
 
@@ -22,6 +22,6 @@ export const changeUserRole = async (id, role) => {
         const res = await axiosInstance.post(`/admin/user/edit-role/${userId}/${role}`)
         return res.data;
     }catch (error){
-        return handleError(error, "React Cannot change role of user")
+        return handleError(error, "React: Cannot change role of user")
     }
 }

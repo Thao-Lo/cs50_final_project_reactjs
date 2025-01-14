@@ -1,4 +1,4 @@
-function SeatListComponent () {
+function SeatListComponent() {
 
 }
 export default SeatListComponent;
