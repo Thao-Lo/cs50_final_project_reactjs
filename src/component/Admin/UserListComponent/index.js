@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { retrieveUserList } from "../../../services/adminUserService";
 import { Box, Button, Paper, TableContainer, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
-import EditUserRoleDialog from "../EditUserRoleDialog";
+import EditUserRoleButton from "../EditUserRoleButton";
+
 
 function UserListComponent() {
     const [usersData, setUsersData] = useState({
         users: [],
         currentPage: null,
-        usersPerPage: null,
-        totalPages: null,
-        totalRows: null
+        usersPerPage: 0,
+        totalPages: 0,
+        totalRows: 0
     });
     const [error, setError] = useState(null);
+    const [updateValueMessage, setUpdateValueMessage] = useState(null)
     const [isLoading, setIsLoading] = useState(false);
     const [paginationModel, serPaginationModel] = useState({ page: 0, pageSize: 5 })  
 
@@ -24,9 +26,13 @@ function UserListComponent() {
         { field: 'role', headerName: 'Role', width: 110 },
         { field: 'edit', headerName: 'Edit Role', width: 110,  
             renderCell: (params) => (
-            <EditUserRoleDialog />
+                //passing whole user data as a prop using params.row {id, email, username,..} destructuring in props
+            <EditUserRoleButton key ={params.row.id} id={params.row.id} value={params.row.role} handleUpdateValueMessage={handleUpdateValueMessage}/>
         ), },
     ];
+    const handleUpdateValueMessage = (newMessage) => {
+        setUpdateValueMessage(newMessage)
+    }
 
     const fetchUserList = async () => {
         setIsLoading(true)
@@ -47,7 +53,8 @@ function UserListComponent() {
     }
     useEffect(() => {
         fetchUserList();
-    }, [paginationModel])
+        setUpdateValueMessage(null)
+    }, [paginationModel, updateValueMessage])
 
     const rows = usersData.users && usersData.users.map(({ id, username, email, role }, index) => ({
         index: paginationModel.page * paginationModel.pageSize + index + 1,
@@ -65,7 +72,7 @@ function UserListComponent() {
             <Box>
                 <Typography variant="h6" sx={{ pl: 1 }}>User List:</Typography>
                 <TableContainer sx={{ height: 900, width: '100%' }}>
-                    <Paper sx={{ height: 400, maxWidth: 1000 }}>
+                    <Paper sx={{ height: 600, maxWidth: 1000 }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}

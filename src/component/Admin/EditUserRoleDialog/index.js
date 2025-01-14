@@ -1,43 +1,35 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import PropTypes from 'prop-types';
+import { useEffect, useRef, useState } from 'react';
+
 
 const options = ["ADMIN", "GUEST"];
 
-function ConfirmationDialogRaw(props) {
-    const { onClose, value: valueProp, open, ...other } = props;
-    const [value, setValue] = React.useState(valueProp);
-    const radioGroupRef = React.useRef(null);
+function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleChange }) {
+    const [value, setValue] = useState(valueProp);
+    const radioGroupRef = useRef(valueProp);
 
-    React.useEffect(() => {
-        if (!open) {
-            setValue(valueProp);
-        }
-    }, [valueProp, open]);
+    // useEffect(() => {
+    //     if (!open) {
+    //         setValue(valueProp);
+    //     }
+    // }, [valueProp, open]);
 
-    const handleEntering = () => {
-        if (radioGroupRef.current != null) {
-            radioGroupRef.current.focus();
-        }
-    };
 
     const handleCancel = () => {
         onClose();
     };
 
     const handleOk = () => {
-        onClose(value);
+        handleSubmitRoleChange(value);
+        onClose();
     };
 
     const handleChange = (event) => {
@@ -48,11 +40,9 @@ function ConfirmationDialogRaw(props) {
         <Dialog
             sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
             maxWidth="xs"
-            TransitionProps={{ onEntering: handleEntering }}
             open={open}
-            {...other}
         >
-            <DialogTitle>Role</DialogTitle>
+            <DialogTitle>Current Role: {valueProp}</DialogTitle>
             <DialogContent dividers>
                 <RadioGroup
                     ref={radioGroupRef}
@@ -81,41 +71,10 @@ function ConfirmationDialogRaw(props) {
     );
 }
 
-ConfirmationDialogRaw.propTypes = {
+EditUserRoleDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     value: PropTypes.string.isRequired,
 };
 
-export default function EditUserRoleDialog() {
-    const [open, setOpen] = React.useState(false);
-    const [value, setValue] = React.useState('Dione');
-
-    const handleClickListItem = () => {
-        setOpen(true);
-    };
-
-    const handleClose = (newValue) => {
-        setOpen(false);
-
-        if (newValue) {
-            setValue(newValue);
-        }
-    };
-
-    return (
-        <>
-            <Button variant="contained" size="small" onClick={handleClickListItem}>
-                Edit
-            </Button>
-
-            <ConfirmationDialogRaw
-                id="ringtone-menu"
-                keepMounted
-                open={open}
-                onClose={handleClose}
-                value={value}
-            />
-        </>
-    );
-}
+export default EditUserRoleDialog;
