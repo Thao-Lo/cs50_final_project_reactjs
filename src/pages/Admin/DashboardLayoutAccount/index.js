@@ -13,9 +13,9 @@ import HomePage from '../../HomePage';
 import UserManagementPage from '../UserManagementPage';
 
 const demoTheme = createTheme({
-    cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme',},
+    cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme', },
     colorSchemes: { light: true, dark: true },
-    breakpoints: { values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536,},},
+    breakpoints: { values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536, }, },
 });
 
 const NAVIGATION = [
@@ -30,37 +30,60 @@ const NAVIGATION = [
         icon: <ShoppingCartIcon />,
     },
     {
+        segment: 'seat-list',
+        title: 'Seat List',
+        icon: <ShoppingCartIcon />,
+    },
+    {
+        segment: 'date-list',
+        title: 'Date List',
+        icon: <ShoppingCartIcon />,
+    },
+    {
         segment: 'slot-list',
         title: 'Slot List',
         icon: <ShoppingCartIcon />,
     },
+    {
+        segment: 'reservation-list',
+        title: 'Reservation List',
+        icon: <ShoppingCartIcon />,
+    },
 ];
 
-function DashboardLayoutAccount() {      
+function DashboardLayoutAccount() {
     const router = useDemoRouter('/admin/dashboard');
 
     const renderComponent = () => {
-        switch(router.pathname) {
-            case '/dashboard': 
-            return <HomePage/>;
-            case '/user-management': 
-            return <UserManagementPage/>;
+        switch (router.pathname) {
+            case '/dashboard':
+                return <HomePage />;
+            case '/user-management':
+                return <UserManagementPage />;
+            case 'seat-list':
+                return <HomePage />;
+            case 'date-list':
+                return <HomePage />;
+            case 'slot-list':
+                return <HomePage />;
+            case 'reservation-list':
+                return <HomePage />;
             default:
-                return <HomePage/>;
+                return <HomePage />;
         }
     }
 
-    return (        
-        <AppProvider          
+    return (
+        <AppProvider
             navigation={NAVIGATION}
             router={router}
-            theme={demoTheme}            
+            theme={demoTheme}
         >
             <DashboardLayout>
                 {router.pathname}
-               {renderComponent()}                 
+                {renderComponent()}
             </DashboardLayout>
-        </AppProvider>   
+        </AppProvider>
     );
 }
 
