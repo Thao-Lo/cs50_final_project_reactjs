@@ -30,7 +30,7 @@ export const retrieveReservationInfo = async (sessionId) => {
         return res.data;
 
     } catch (error) {
-        return handleError(error, 'Can not retrieve reservation information')
+        return handleError(error, 'React: Can not retrieve reservation information')
     }
 }
 
@@ -41,7 +41,7 @@ export const createPayment = async (sessionId) => {
         })
         return res.data;
     } catch (error) {
-        return handleError(error, 'Cannot create payment')
+        return handleError(error, 'React: Cannot create payment')
     }
 }
 
@@ -56,7 +56,7 @@ export const confirmReservation = async (sessionId, paymentIntentId) => {
         })
         return res.data;
     } catch (error) {
-        return handleError(error, 'Can not create payment')
+        return handleError(error, 'React: Can not create payment')
     }
 }
 
@@ -73,6 +73,6 @@ export const retrieveUserReservationList = async (userId, page, size) => {
         return res.data;
 
     } catch (error) {
-        return handleError(error, "Cannot get user reservation list")
+        return handleError(error, "React: Cannot get user reservation list")
     }
 }

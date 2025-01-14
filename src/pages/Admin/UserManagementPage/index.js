@@ -1,11 +1,16 @@
 import { Box } from "@mui/material";
+import UserListComponent from "../../../component/Admin/UserListComponent";
 
 
-function UserManagementPage () {
+function UserManagementPage() {
 
-return (
-    <Box>User Management Page</Box>
+    return (
+        <>
+            <Box>User Management Page</Box>
+            <UserListComponent />
+        </>
 
-)
+
+    )
 }
 export default UserManagementPage;

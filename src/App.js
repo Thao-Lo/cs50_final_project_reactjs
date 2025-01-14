@@ -38,7 +38,7 @@ function App() {
               </Route>
 
               {/* User Routes*/}
-              <Route path="/user/*" element={<RoleGuard allowedRole={['USER']} />}>
+              <Route path="/user/*" element={<RoleGuard allowedRole={['GUEST']} />}>
                 <Route path='reservation' element={<ReservationPage />} />
                 <Route path="reservation/payment-complete" element={<PaymentCompletePage />} />
                 <Route path="profile" element={<UserPage />} />
