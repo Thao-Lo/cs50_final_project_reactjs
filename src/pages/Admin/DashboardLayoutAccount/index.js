@@ -9,24 +9,8 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useDemoRouter } from '@toolpad/core/internal';
 import { Outlet, useNavigate } from 'react-router-dom';
-
-const NAVIGATION = [
-    {
-        segment: 'admin/dashboard',
-        title: 'Dashboard',
-        icon: <DashboardIcon />,
-    },
-    {
-        segment: 'admin/dashboard/user-management',
-        title: 'User Management',
-        icon: <ShoppingCartIcon />,
-    },
-    {
-        segment: 'admin/dashboard/slot-list',
-        title: 'Slot List',
-        icon: <ShoppingCartIcon />,
-    },
-];
+import HomePage from '../../HomePage';
+import UserManagementPage from '../UserManagementPage';
 
 const demoTheme = createTheme({
     cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme',},
@@ -34,51 +18,50 @@ const demoTheme = createTheme({
     breakpoints: { values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536,},},
 });
 
+const NAVIGATION = [
+    {
+        segment: 'dashboard',
+        title: 'Dashboard',
+        icon: <DashboardIcon />,
+    },
+    {
+        segment: 'user-management',
+        title: 'User Management',
+        icon: <ShoppingCartIcon />,
+    },
+    {
+        segment: 'slot-list',
+        title: 'Slot List',
+        icon: <ShoppingCartIcon />,
+    },
+];
 
-function DashboardLayoutAccount() {    
-    const navigate = useNavigate();
-    const router = useDemoRouter('./admin/dashboard/');
+function DashboardLayoutAccount() {      
+    const router = useDemoRouter('/admin/dashboard');
 
-    const handleNavigation = (path) =>{
-        navigate(path)
+    const renderComponent = () => {
+        switch(router.pathname) {
+            case '/dashboard': 
+            return <HomePage/>;
+            case '/user-management': 
+            return <UserManagementPage/>;
+            default:
+                return <HomePage/>;
+        }
     }
-    const fixNavigation = NAVIGATION.map((item) => ({
-        ...item,
-        onClick : () => handleNavigation(item.segment)
-    }))
-    return (
-        // preview-start
+
+    return (        
         <AppProvider          
-            navigation={fixNavigation}
+            navigation={NAVIGATION}
             router={router}
             theme={demoTheme}            
         >
             <DashboardLayout>
-                <Outlet/>                
+                {router.pathname}
+               {renderComponent()}                 
             </DashboardLayout>
-        </AppProvider>
-        // preview-end
+        </AppProvider>   
     );
-
-    // function DemoPageContent({ pathname }) {
-//     return (
-//         <Box
-//             sx={{
-//                 py: 4,
-//                 display: 'flex',
-//                 flexDirection: 'column',
-//                 alignItems: 'center',
-//                 textAlign: 'center',
-//             }}
-//         >
-//             <Typography>Dashboard content for {pathname}</Typography>
-//         </Box>
-//     );
-// }
-// DemoPageContent.propTypes = {
-//     pathname: PropTypes.string.isRequired,
-// };
-
 }
 
 export default DashboardLayoutAccount;

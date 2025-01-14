@@ -45,8 +45,8 @@ function App() {
               </Route>
               <Route path="/admin/*" element={<RoleGuard allowedRole={['ADMIN']} />}>
                 <Route path="dashboard" element={<DashboardLayoutAccount />}>
-                  <Route path='user-management' element={<UserManagementPage />} />
-                  <Route path='*' element={<HomePage />}/>
+                  {/* <Route path='user-management' element={<UserManagementPage />} />
+                  <Route path='*' element={<HomePage />}/> */}
                 </Route>
               </Route>
 
