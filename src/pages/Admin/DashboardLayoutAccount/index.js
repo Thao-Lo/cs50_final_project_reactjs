@@ -11,6 +11,10 @@ import { useDemoRouter } from '@toolpad/core/internal';
 import { Outlet, useNavigate } from 'react-router-dom';
 import HomePage from '../../HomePage';
 import UserManagementPage from '../UserManagementPage';
+import SeatListPage from '../SeatListPage';
+import DateListPage from '../DateListPage';
+import SlotListPage from '../SlotListPage';
+import ReservationManagementPage from '../ReservationManagementPage';
 
 const demoTheme = createTheme({
     cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme', },
@@ -60,14 +64,14 @@ function DashboardLayoutAccount() {
                 return <HomePage />;
             case '/user-management':
                 return <UserManagementPage />;
-            case 'seat-list':
-                return <HomePage />;
-            case 'date-list':
-                return <HomePage />;
-            case 'slot-list':
-                return <HomePage />;
-            case 'reservation-list':
-                return <HomePage />;
+            case '/seat-list':
+                return <SeatListPage />;
+            case '/date-list':
+                return <DateListPage />;
+            case '/slot-list':
+                return <SlotListPage />;
+            case '/reservation-list':
+                return <ReservationManagementPage />;
             default:
                 return <HomePage />;
         }

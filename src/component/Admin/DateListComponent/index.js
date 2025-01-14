@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+import { Box,  Paper, TableContainer, Typography } from "@mui/material";
+import { DataGrid } from '@mui/x-data-grid';
+import { retrieveDateList } from "../../../services/adminManagementService";
+
 function DateListComponent () {
     //initial state of DateList
     const [datesData, setDatesData] = useState({
@@ -9,7 +14,7 @@ function DateListComponent () {
     });
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
+    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
     //Data grid columns - key, header name and size 
     const columns = [
@@ -59,14 +64,14 @@ function DateListComponent () {
             <Box>
                 <Typography variant="h6" sx={{ pl: 1 }}>Date List:</Typography>
                 <TableContainer sx={{ height: 900, width: '100%' }}>
-                    <Paper sx={{ height: 600, maxWidth: 1000 }}>
+                    <Paper sx={{ height: 630, maxWidth: 1000 }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}
                             rowCount={datesData.totalRows}
                             pagination
                             paginationMode="server"
-                            pageSizeOptions={[5, 10]}
+                            pageSizeOptions={[10, 15]}
                             onPaginationModelChange={handlePaginationChange}
                             paginationModel={paginationModel}
                             checkboxSelection
