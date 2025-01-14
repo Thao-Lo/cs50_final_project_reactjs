@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { retrieveUserList } from "../../../services/adminUserService";
 import { Box, Button, Paper, TableContainer, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
+import EditUserRoleDialog from "../EditUserRoleDialog";
 
 function UserListComponent() {
     const [usersData, setUsersData] = useState({
@@ -23,9 +24,7 @@ function UserListComponent() {
         { field: 'role', headerName: 'Role', width: 110 },
         { field: 'edit', headerName: 'Edit Role', width: 110,  
             renderCell: (params) => (
-            <Button variant="contained" size="small">
-                Edit
-            </Button>
+            <EditUserRoleDialog />
         ), },
     ];
 
