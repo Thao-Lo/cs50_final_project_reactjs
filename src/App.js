@@ -26,11 +26,7 @@ function App() {
           <BrowserRouter>
             <NavBarReservation />
             <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-              <Route path="/booking" element={<BookingPage />} />
-
+              {/* check accessToken*/}
               <Route element={<AuthGuard />}>
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/verify-email" element={<EmailVerificationPage />} />
@@ -39,17 +35,23 @@ function App() {
 
               {/* User Routes*/}
               <Route path="/user/*" element={<RoleGuard allowedRole={['GUEST']} />}>
+                <Route path="profile" element={<UserPage />} />
                 <Route path='reservation' element={<ReservationPage />} />
                 <Route path="reservation/payment-complete" element={<PaymentCompletePage />} />
-                <Route path="profile" element={<UserPage />} />
               </Route>
+
+              {/* Admin Routes*/}
               <Route path="/admin/*" element={<RoleGuard allowedRole={['ADMIN']} />}>
                 <Route path="dashboard" element={<DashboardLayoutAccount />}>
                   {/* <Route path='user-management' element={<UserManagementPage />} />
                   <Route path='*' element={<HomePage />}/> */}
                 </Route>
               </Route>
-
+              {/* <Route path="user/reservation/payment-complete" element={<PaymentCompletePage />} /> */}
+              {/* Public Routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="/booking" element={<BookingPage />} />
             </Routes>
           </BrowserRouter>
         </ReservationProvider>

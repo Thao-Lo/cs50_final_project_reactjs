@@ -12,6 +12,7 @@ const initialState = {
 
 export const USER_ACTION = {
     LOGIN: 'LOGIN',
+    SET_AUTHENTICATED: 'SET_AUTHENTICATED',
     AUTH_MESSAGE: 'AUTH_MESSAGE',
     AUTH_ERROR: 'AUTH_ERROR',
     LOGOUT: 'LOGOUT'
@@ -63,6 +64,9 @@ const UserReducer = (state, action) => {
     switch (action.type) {
         case USER_ACTION.LOGIN: {
             return { ...state, user: action.payload, isAuthenticated: true, error: null }
+        }
+        case USER_ACTION.SET_AUTHENTICATED: {
+            return { ...state, isAuthenticated: true }
         }
         case USER_ACTION.AUTH_MESSAGE: {
             return { ...state, message: action.payload, error: null }

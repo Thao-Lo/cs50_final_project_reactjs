@@ -1,17 +1,16 @@
+import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
+import { Link } from "react-router-dom";
+import { confirmReservation } from "../../services/reservationService";
 import PaymentCompleteComponent from "../../stripe/PaymentCompleteComponent";
 import PaymentLayout from "../../stripe/PaymentLayout";
 import { useStripeContext } from "../../stripe/StripeContext";
-import { confirmReservation } from "../../services/reservationService";
-import { Box, Container, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 
 function PaymentCompletePage() {
     const { setClientSecret, paymentIntentId, setPaymentIntentId } = useStripeContext();
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
-
+    
     const urlParams = new URLSearchParams(window.location.search);
 
     const clientSecret = urlParams.get(
