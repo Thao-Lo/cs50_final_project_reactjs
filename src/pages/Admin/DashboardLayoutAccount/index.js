@@ -1,20 +1,20 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { createTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useDemoRouter } from '@toolpad/core/internal';
-import { Outlet, useNavigate } from 'react-router-dom';
 import HomePage from '../../HomePage';
-import UserManagementPage from '../UserManagementPage';
-import SeatListPage from '../SeatListPage';
 import DateListPage from '../DateListPage';
-import SlotListPage from '../SlotListPage';
 import ReservationManagementPage from '../ReservationManagementPage';
+import SeatListPage from '../SeatListPage';
+import SlotListPage from '../SlotListPage';
+import UserManagementPage from '../UserManagementPage';
+import PeopleIcon from '@mui/icons-material/People';
+import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AppsIcon from '@mui/icons-material/Apps';
+import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 
 const demoTheme = createTheme({
     cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme', },
@@ -29,29 +29,41 @@ const NAVIGATION = [
         icon: <DashboardIcon />,
     },
     {
+        kind: 'header',
+        title: 'User Items',
+      },
+    {
         segment: 'user-management',
         title: 'User Management',
-        icon: <ShoppingCartIcon />,
+        icon: <PeopleIcon />,
     },
+    {
+        kind: 'header',
+        title: 'Booking Items',
+      },
     {
         segment: 'seat-list',
         title: 'Seat List',
-        icon: <ShoppingCartIcon />,
+        icon: <TableRestaurantIcon />,
     },
     {
         segment: 'date-list',
         title: 'Date List',
-        icon: <ShoppingCartIcon />,
+        icon: <CalendarMonthIcon />,
     },
     {
         segment: 'slot-list',
         title: 'Slot List',
-        icon: <ShoppingCartIcon />,
+        icon: <AppsIcon />,
     },
+    {
+        kind: 'header',
+        title: 'Reservation Items',
+      },
     {
         segment: 'reservation-list',
         title: 'Reservation List',
-        icon: <ShoppingCartIcon />,
+        icon: <DinnerDiningIcon />,
     },
 ];
 
@@ -82,6 +94,10 @@ function DashboardLayoutAccount() {
             navigation={NAVIGATION}
             router={router}
             theme={demoTheme}
+            branding={{
+                title: 'ZAVIS',
+                homeUrl: '/dashboard',
+            }}
         >
             <DashboardLayout>
                 {router.pathname}

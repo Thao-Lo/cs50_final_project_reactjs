@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { changeUserRole } from "../../../services/adminUserService";
 import { changeReservationStatus } from "../../../services/adminManagementService";
 
-export default function EditButton({ id, value: valueProp, type, handleUpdateValueMessage }) {
+export default function EditButton({ id, value: valueProp, type, handleUpdateValueMessage, disabled }) {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(valueProp);
 
@@ -35,7 +35,7 @@ export default function EditButton({ id, value: valueProp, type, handleUpdateVal
 
     return (
         <>
-            <Button variant="contained" size="small" onClick={handleClickListItem}>
+            <Button variant="contained" size="small" onClick={handleClickListItem} disabled = {type === 'Status' && disabled}>
                 Edit
             </Button>
 

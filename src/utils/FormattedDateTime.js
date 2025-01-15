@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const getFormattedTime = () => {
     //with seconds [14:43:34]
     const time = new Date().toISOString().split('T')[1].split('.')[0];
@@ -23,4 +25,11 @@ export const formatCountdownTime = (TTL) => {
     const seconds = TTL % 60;
     const formatSeconds = seconds < 10 ? `0${seconds}` : seconds;
     return `${minutes}:${formatSeconds}`
+}
+
+export const calculateDateAndTime = (date, time) => {
+    const rowDate = dayjs(date).valueOf();
+    const [hours, minutes, seconds] = time.split(":").map(Number);
+    const rowTime = (hours * 3600 + minutes * 60) * 1000;
+    return rowDate + rowTime;
 }
