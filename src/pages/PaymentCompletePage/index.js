@@ -10,7 +10,8 @@ function PaymentCompletePage() {
     const { setClientSecret, paymentIntentId, setPaymentIntentId } = useStripeContext();
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
-    
+    const [isLoading, setIsLoading] = useState(true);
+
     const urlParams = new URLSearchParams(window.location.search);
 
     const clientSecret = urlParams.get(
@@ -25,47 +26,70 @@ function PaymentCompletePage() {
     }, [clientSecret, setClientSecret])
 
 
-    const fetchConfirmReservation = async () => {
+    const fetchConfirmReservation = async (retryCount = 3, retryDelay = 2000) => {
+
         const storedSessionId = sessionStorage.getItem('sessionId');
         console.log("complete storedSessionId" + storedSessionId);
-        if (storedSessionId && paymentIntentId) {
+        if (!storedSessionId || !paymentIntentId) {
+            setError("Missing required parameters.");
+            return;
+        }
+        //try 3 times, gap 2 secs
+        for (let attempt = 1; attempt <= retryCount; attempt++) {
             const result = await confirmReservation(storedSessionId, paymentIntentId);
+            console.log(`Attempt ${attempt}/${retryCount}: Fetching reservation...`);
             if (result.error) {
-                setError(result.message)
+                if (attempt === retryCount) {
+                    setError(result.message)
+                    setIsLoading(false);
+                    return;
+                }
+                await new Promise(resolve => setTimeout(resolve, retryDelay))
+
+
+            } else {
+                console.log(result);
+                setMessage(result.message)
+                setError('')
+                setClientSecret(null);
+                setPaymentIntentId(null)
+                sessionStorage.removeItem('sessionId');
+                setIsLoading(false);
                 return;
             }
-            console.log(result);
-            setMessage(result.message)
-            setError('')
-            setClientSecret('');
-            setPaymentIntentId('')
-            sessionStorage.removeItem('sessionId');
-        } else {
-            setError("Missing required parameters.")
         }
 
     }
     useEffect(() => {
-        const timer = setTimeout(() => {
+        if (paymentIntentId) {
             fetchConfirmReservation();
-        }, 5000)
-        return () => clearInterval(timer)
+        }
     }, [paymentIntentId])
+
+
 
     return (
         <>
             <Container maxWidth="lg" sx={{ p: { xs: 1 } }}>
-                <Box sx={{ mb: 2 }}>
-                    <PaymentLayout>
-                        <PaymentCompleteComponent />
-                    </PaymentLayout>
-                </Box>
-                <Box>
-                    <Box sx={{ mb: 2 }}>{message ? message : error}</Box>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        <Link to="/user/profile">Click to Check your reservation</Link>
-                    </Typography>
-                </Box>
+                {/* show Payment Layout right after page is rendered */}
+                {isLoading && (
+                    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+                        <PaymentLayout>
+                            <PaymentCompleteComponent />
+                        </PaymentLayout>
+                    </Box>
+                )}
+
+                {/* show message from calling API either success or error */}
+                {!isLoading && (
+                    <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'center', p:2 }}>
+                        <Box sx={{ color: message ? 'text.success' : 'text.error', fontSize: '1.25rem' }}>{message ? message : error}</Box>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            <Link to="/user/profile">Click to Check your reservation</Link>
+                        </Typography>
+                    </Box>
+                )}
+
             </Container>
 
         </>

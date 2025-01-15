@@ -15,6 +15,7 @@ function CheckoutForm() {
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { state: { sessionId } } = useReservation();
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,6 +49,7 @@ function CheckoutForm() {
     setIsLoading(false);
   };
 
+
   const paymentElementOptions = {
     layout: "accordion"
   }
@@ -55,7 +57,6 @@ function CheckoutForm() {
   return (
     <div className="StripeContainer">
       <form id="payment-form" onSubmit={handleSubmit}>
-
         <PaymentElement id="payment-element" options={paymentElementOptions} />
         <button disabled={isLoading || !stripe || !elements} id="submit">
           <span id="button-text">
