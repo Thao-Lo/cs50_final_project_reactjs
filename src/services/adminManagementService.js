@@ -62,7 +62,7 @@ export const retrieveReservationList = async (page, size) => {
 export const changeReservationStatus = async (id, status) => {
     try {
         const reservationId = Number(id);
-        const res = await axiosInstance.post(`/admin/reservation/edit/${reservationId}/${status}`)
+        const res = await axiosInstance.post(`/admin/reservations/edit/${reservationId}/${status}`)
         return res.data;
     } catch (error) {
         return handleError(error, "React: Cannot change Reservation status")

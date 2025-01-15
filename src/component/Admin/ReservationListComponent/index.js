@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Box, Button, Paper, TableContainer, Typography } from "@mui/material";
+import { Box, Paper, TableContainer, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
-import EditUserRoleButton from "../EditUserRoleButton";
+import { useEffect, useState } from "react";
 import { retrieveReservationList } from "../../../services/adminManagementService";
+import EditButton from "../EditButton";
 
 function ReservationListComponent () {
    //initial state of Reservation List
@@ -23,10 +23,10 @@ const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 }
 
 //Data grid columns - key, header name and size 
 const columns = [
-    { field: 'index', headerName: 'No', width: 90 },
-    { field: 'id', headerName: 'Slot Id', width: 100 },
+    { field: 'index', headerName: 'No', width: 90 },  
     { field: 'tableName', headerName: 'Table Name', width: 130 },
     { field: 'capacity', headerName: 'Capacity', width: 100 },
+    { field: 'id', headerName: 'Reservation Id', width: 100 },
     { field: 'date', headerName: 'Date', width: 130 },
     { field: 'time', headerName: 'Time', width: 130 },
     { field: 'status', headerName: 'Status', width: 140 },
@@ -34,8 +34,8 @@ const columns = [
         field: 'edit', headerName: 'Edit Status', width: 110,
         renderCell: (params) => (
             //passing whole user data as a prop using params.row {id, email, username,..} destructuring in props
-            <EditUserRoleButton key={params.row.id} id={params.row.id} value={params.row.role}
-                handleUpdateValueMessage={handleUpdateValueMessage}
+            <EditButton key={"reservation" + params.row.id} id={params.row.id} value={params.row.status}
+                handleUpdateValueMessage={handleUpdateValueMessage} type={'Status'}
             />
         ),
     },
@@ -81,21 +81,21 @@ useEffect(() => {
 }, [updateValueMessage])
 
 //render user list for each row
-const rows = reservationsData.reservations && reservationsData.reservations.map(({   id, tableName, capacity, date, time, status  }, index) => ({
+const rows = reservationsData.reservations && reservationsData.reservations.map(({id, tableName, capacity, date, time, status  }, index) => ({
     index: paginationModel.page * paginationModel.pageSize + index + 1,
-    id, tableName, capacity, date, time, status 
+    tableName, capacity,id, date, time, status 
 
 }))
 const handlePaginationChange = (newModel) => {
     setPaginationModel(newModel);
 }
 if (error) return <Box>{error}</Box>
-if (isLoading) return <Box>Loading User Data .... </Box>
+if (isLoading) return <Box>Loading Reservation Data .... </Box>
 
 return (
     <>
         <Box>
-            <Typography variant="h6" sx={{ pl: 1 }}>User List:</Typography>
+            <Typography variant="h6" sx={{ pl: 1 }}>Reservation List:</Typography>
             {showMessage && (
                 <Typography variant="subtitle1" sx={{ color: updateValueMessage.type === 'success' ? "green" : "red", marginBottom: 2 }}>
                     {updateValueMessage.text}

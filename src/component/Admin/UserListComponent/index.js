@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { retrieveUserList } from "../../../services/adminUserService";
 import { Box, Button, Paper, TableContainer, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
-import EditUserRoleButton from "../EditUserRoleButton";
+import EditButton from "../EditButton";
 
 
 function UserListComponent() {
@@ -33,8 +33,8 @@ function UserListComponent() {
             field: 'edit', headerName: 'Edit Role', width: 110,
             renderCell: (params) => (
                 //passing whole user data as a prop using params.row {id, email, username,..} destructuring in props
-                <EditUserRoleButton key={params.row.id} id={params.row.id} value={params.row.role}
-                    handleUpdateValueMessage={handleUpdateValueMessage}
+                <EditButton key={params.row.id} id={params.row.id} value={params.row.role}
+                    handleUpdateValueMessage={handleUpdateValueMessage} type={'Role'}
                 />
             ),
         },

@@ -10,10 +10,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 
-
-const options = ["ADMIN", "GUEST"];
-
-function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleChange }) {
+function EditDialog({ onClose, value: valueProp, open, handleSubmitChange, options, type }) {
     const [value, setValue] = useState(valueProp);
     const radioGroupRef = useRef(valueProp);
 
@@ -29,12 +26,12 @@ function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleC
     };
 
     const handleOk = () => {
-        if(value !== valueProp){
-            handleSubmitRoleChange(value);           
+        if (value !== valueProp) {
+            handleSubmitChange(value);
             onClose();
-        }else{
+        } else {
             onClose();
-        }               
+        }
     };
 
     const handleChange = (event) => {
@@ -47,7 +44,7 @@ function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleC
             maxWidth="xs"
             open={open}
         >
-            <DialogTitle>Current Role: {valueProp}</DialogTitle>
+            <DialogTitle>Current {type}: {valueProp}</DialogTitle>
             <DialogContent dividers>
                 <RadioGroup
                     ref={radioGroupRef}
@@ -64,7 +61,7 @@ function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleC
                             label={option}
                         />
                     ))}
-                </RadioGroup>             
+                </RadioGroup>
             </DialogContent>
             <DialogActions>
                 <Button autoFocus onClick={handleCancel}>
@@ -76,10 +73,13 @@ function EditUserRoleDialog({ onClose, value: valueProp, open, handleSubmitRoleC
     );
 }
 
-EditUserRoleDialog.propTypes = {
+EditDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     value: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    handleSubmitChange: PropTypes.func.isRequired
 };
 
-export default EditUserRoleDialog;
+export default EditDialog;

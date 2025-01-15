@@ -1,9 +1,10 @@
 import { useState } from "react";
-import EditUserRoleDialog from "../EditUserRoleDialog";
+import EditDialog from "../EditDialog";
 import { Button } from "@mui/material";
 import { changeUserRole } from "../../../services/adminUserService";
+import { changeReservationStatus } from "../../../services/adminManagementService";
 
-export default function EditUserRoleButton({ id, value: valueProp, handleUpdateValueMessage }) {
+export default function EditButton({ id, value: valueProp, type, handleUpdateValueMessage }) {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(valueProp);
 
@@ -15,8 +16,14 @@ export default function EditUserRoleButton({ id, value: valueProp, handleUpdateV
         setOpen(false);
         console.log("role:" + valueProp);
     };
-    const handleSubmitRoleChange = async (changedValue) => {
-        const result = await changeUserRole(id, changedValue);
+    const handleSubmitChange = async (changedValue) => {
+        let result;
+        if (type === 'Role') {
+            result = await changeUserRole(id, changedValue);
+        } else if (type === 'Status') {
+            result = await changeReservationStatus(id, changedValue);
+        }
+
         if (result.error) {
             handleUpdateValueMessage({ text: result.message, type: "error" });
             console.log("update role error: " + result.message);
@@ -32,13 +39,15 @@ export default function EditUserRoleButton({ id, value: valueProp, handleUpdateV
                 Edit
             </Button>
 
-            <EditUserRoleDialog
+            <EditDialog
                 key={id}
                 keepMounted
                 open={open}
+                type={type}
+                options={type === 'Role' ? ['ADMIN', 'GUEST'] : ['BOOKED', 'CANCELLED']}
                 onClose={handleClose}
                 value={value}
-                handleSubmitRoleChange={handleSubmitRoleChange}
+                handleSubmitChange={handleSubmitChange}
             />
         </>
     );
