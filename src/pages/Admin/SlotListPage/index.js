@@ -5,7 +5,7 @@ function SlotListPage () {
 
     return (
         <>
-            <Box>Slot List</Box>
+           
             <SlotListComponent />
         </>
 

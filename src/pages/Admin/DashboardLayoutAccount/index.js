@@ -100,7 +100,7 @@ function DashboardLayoutAccount() {
             }}
         >
             <DashboardLayout>
-                {router.pathname}
+                {/* {router.pathname} */}
                 {renderComponent()}
             </DashboardLayout>
         </AppProvider>

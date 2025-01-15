@@ -4,7 +4,7 @@ import ReservationListComponent from "../../../component/Admin/ReservationListCo
 function ReservationManagementPage() {
     return (
         <>
-            <Box>Reservation Managenent List</Box>
+            
             <ReservationListComponent />
         </>
     )

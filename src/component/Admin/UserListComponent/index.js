@@ -93,8 +93,8 @@ function UserListComponent() {
 
     return (
         <>
-            <Box>
-                <Typography variant="h6" sx={{ pl: 1 }}>User List:</Typography>
+            <Box sx={{ p: { xs: 0, sm: 2 } }}>
+                <Typography variant="h6" sx={{ pl: 1 }}>User List</Typography>
                 {showMessage && (
                     <Typography variant="subtitle1" sx={{ color: updateValueMessage.type === 'success' ? "green" : "red", marginBottom: 2 }}>
                         {updateValueMessage.text}
@@ -111,7 +111,7 @@ function UserListComponent() {
                             pageSizeOptions={[5, 10]}
                             onPaginationModelChange={handlePaginationChange}
                             paginationModel={paginationModel}
-                            checkboxSelection
+
                             sx={{ border: 0 }}
                         />
                     </Paper>

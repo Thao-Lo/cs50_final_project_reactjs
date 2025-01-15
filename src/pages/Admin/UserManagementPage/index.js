@@ -6,7 +6,7 @@ function UserManagementPage() {
 
     return (
         <>
-            <Box>User Management Page</Box>
+           
             <UserListComponent />
         </>
 

@@ -5,7 +5,7 @@ function DateListPage () {
 
     return (
         <>
-            <Box>Date List</Box>
+           
             <DateListComponent />
         </>
 

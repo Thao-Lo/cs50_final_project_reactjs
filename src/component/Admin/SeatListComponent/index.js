@@ -61,8 +61,8 @@ function SeatListComponent() {
 
     return (
         <>
-            <Box>
-                <Typography variant="h6" sx={{ pl: 1 }}>Seat List:</Typography>
+            <Box sx={{ p: { xs: 0, sm: 2 } }}>
+                <Typography variant="h6" sx={{ pl: 1 }}>Seat List</Typography>
                 <TableContainer sx={{ height: 900, width: '100%' }}>
                     <Paper sx={{ height: 630, maxWidth: 1000 }}>
                         <DataGrid
@@ -73,8 +73,7 @@ function SeatListComponent() {
                             paginationMode="server"
                             pageSizeOptions={[10, 15]}
                             onPaginationModelChange={handlePaginationChange}
-                            paginationModel={paginationModel}
-                            checkboxSelection
+                            paginationModel={paginationModel}                           
                             sx={{ border: 0 }}
                         />
                     </Paper>

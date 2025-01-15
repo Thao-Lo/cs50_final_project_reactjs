@@ -107,8 +107,8 @@ function ReservationListComponent() {
 
     return (
         <>
-            <Box>
-                <Typography variant="h6" sx={{ pl: 1 }}>Reservation List:</Typography>
+            <Box sx={{ p: { xs: 0, sm: 2 } }}>
+                <Typography variant="h6" sx={{ pl: 1 }}>Reservation List</Typography>
                 {showMessage && (
                     <Typography variant="subtitle1" sx={{ color: updateValueMessage.type === 'success' ? "green" : "red", marginBottom: 2 }}>
                         {updateValueMessage.text}
@@ -124,8 +124,7 @@ function ReservationListComponent() {
                             paginationMode="server"
                             pageSizeOptions={[10, 15]}
                             onPaginationModelChange={handlePaginationChange}
-                            paginationModel={paginationModel}
-                            checkboxSelection
+                            paginationModel={paginationModel}                           
                             sx={{ border: 0 }}
                         />
                     </Paper>

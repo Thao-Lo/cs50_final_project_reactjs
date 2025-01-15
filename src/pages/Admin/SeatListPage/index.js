@@ -6,7 +6,7 @@ function SeatListPage() {
 
     return (
         <>
-            <Box>Seat List</Box>
+           
             <SeatListComponent />
         </>
     )
