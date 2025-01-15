@@ -1,7 +1,7 @@
-import { Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { resendValidationCode, verifyEmail } from "../../services/authService";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function EmailVerificationPage() {
     const location = useLocation();
@@ -14,6 +14,8 @@ function EmailVerificationPage() {
 
     const [error, setError] = useState('')
     const [isValid, setIsValid] = useState(false)
+    const [message, setMessage] = useState(null)
+    const navigate = useNavigate()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -34,8 +36,11 @@ function EmailVerificationPage() {
         const result = await verifyEmail(email, code)
         if (result.error) {
             setError(result.message)
+            return;
         }
         setIsValid(true);
+        setMessage(result.message)
+
     }
 
     const handleResendCode = async () => {
@@ -50,51 +55,73 @@ function EmailVerificationPage() {
             setError(result.message)
         }
     }
+    useEffect(() => {
+        let timer;
+        if (isValid) {
+            timer = setTimeout(() => {
+                navigate('/login')
+            }, 5000)
+        }
+        return () => clearTimeout(timer)
+    }, [isValid])
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}>
-            <Box  sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        width: '22rem',                       
-                        m: 2}}>
-                <Box sx={{ fontSize: '2rem', fontWeight: 'semibold', mb: 2, textAlign:'center' }}>
+
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '22rem',
+                m: 2
+            }}>
+                <Box sx={{ fontSize: '2rem', fontWeight: 'semibold', mb: 2, textAlign: 'center' }}>
                     Verify Email Address
                 </Box>
-                <Box sx={{padding: 1}}>Please check your email {email} to get verification code</Box>
-                <Box component="form" onSubmit={handleSubmit}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '20rem',
-                        m: 2,
-                        '& .MuiTextField-root': { width: '100%' }
-                    }}
-                    noValidate
-                    autoComplete="off">
-
-                    <TextField
-                        id="validate-code"
-                        label="Code"
-                        type="text"
-                        variant="standard"
-                        name="code"
-                        value={code}
-                        onChange={(e) => { handleInputChange(e); validateInput(e) }}
-                        helperText={codeError || ' '}
-                        error={!!codeError}
-                    />
-                    <Box>{!!error ? error : ' '}</Box>
-                    <Box>{!!emailError ? emailError : ' '}</Box>
-                    <Box sx={{ mt: 2 }}>
-                        <Button variant="contained" type="submit" sx={{ width: '100%' }}>
-                            Validate
-                        </Button>
-                    </Box>
-
+                <Box sx={{ padding: 2, pb: 0 }}>
+                    <Typography sx={{mb:1}}> Please check your email to get verification code: </Typography>
+                    <Typography> Email: {email}</Typography>                 
                 </Box>
-                <Button variant="text" onClick={handleResendCode}>resend code</Button>
+                {!isValid && (
+                    <>
+                        <Box component="form" onSubmit={handleSubmit}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '20rem',
+                                m: 2,
+                                '& .MuiTextField-root': { width: '100%' }
+                            }}
+                            noValidate
+                            autoComplete="off">
+
+                            <TextField
+                                id="validate-code"
+                                label="Code"
+                                type="text"
+                                variant="standard"
+                                name="code"
+                                value={code}
+                                onChange={(e) => { handleInputChange(e); validateInput(e) }}
+                                helperText={codeError || ' '}
+                                error={!!codeError}
+                            />
+                            <Box>{!!error ? error : ' '}</Box>
+                            <Box>{!!emailError ? emailError : ' '}</Box>
+                            <Box sx={{ mt: 2 }}>
+                                <Button variant="contained" type="submit" sx={{ width: '100%' }}>
+                                    Validate
+                                </Button>
+                            </Box>
+
+                        </Box>
+                        <Button variant="text" onClick={handleResendCode}>resend code</Button>
+                    </>
+                )}
+                {isValid && (
+                    <Typography sx={{ p: 3, color: 'green', fontSize: '1.25rem' }}>{message}</Typography>
+                )}
+
             </Box>
         </Box>
     )
