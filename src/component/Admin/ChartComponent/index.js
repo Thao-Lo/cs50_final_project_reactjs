@@ -22,7 +22,7 @@ function TickParamsSelector({
             {/* TICK PLACEMENT */}
             <FormControl>
                 <FormLabel id="tick-placement-radio-buttons-group-label">
-                    tickPlacement
+                    Tick Placement
                 </FormLabel>
                 <RadioGroup
                     row
@@ -44,7 +44,7 @@ function TickParamsSelector({
             {/* TICK LABEL PLACEMENT */}
             <FormControl>
                 <FormLabel id="label-placement-radio-buttons-group-label">
-                    tickLabelPlacement
+                    Tick Table Placement
                 </FormLabel>
                 <RadioGroup
                     row
@@ -64,7 +64,7 @@ function TickParamsSelector({
 function valueFormatter(value) {
     return `${value} times`;
 }
-export default function TickPlacementBars() {
+export default function ChartComponent() {
     const [tickPlacement, setTickPlacement] = useState('middle');
     const [tickLabelPlacement, setTickLabelPlacement] = useState('middle');
     const [data, setData] = useState([]);
@@ -92,7 +92,7 @@ export default function TickPlacementBars() {
     const chartSetting = {
         yAxis: [
             {
-                label: 'Number of Booking ',
+                label: 'Number of Reservation (times) ',
             },
         ],
         series: [{ dataKey: 'reservationCount', label: 'Booking value', valueFormatter }],
@@ -105,19 +105,19 @@ export default function TickPlacementBars() {
     };
 
     return (
-        <div style={{ width: 780 }}>
-            <TickParamsSelector
-                tickPlacement={tickPlacement}
-                tickLabelPlacement={tickLabelPlacement}
-                setTickPlacement={setTickPlacement}
-                setTickLabelPlacement={setTickLabelPlacement}
-            />
+        <div style={{ width: 780 }}>          
             <BarChart
                 dataset={data}
                 xAxis={[
                     { scaleType: 'band', dataKey: 'seatName', tickPlacement, tickLabelPlacement },
                 ]}
                 {...chartSetting}
+            />
+              <TickParamsSelector
+                tickPlacement={tickPlacement}
+                tickLabelPlacement={tickLabelPlacement}
+                setTickPlacement={setTickPlacement}
+                setTickLabelPlacement={setTickLabelPlacement}
             />
         </div>
     );

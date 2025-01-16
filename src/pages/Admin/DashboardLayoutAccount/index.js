@@ -15,7 +15,7 @@ import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AppsIcon from '@mui/icons-material/Apps';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
-import TickPlacementBars from '../../../component/Admin/ChartComponent';
+import DashboardPage from '../DashboardPage';
 
 const demoTheme = createTheme({
     cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme', },
@@ -74,7 +74,7 @@ function DashboardLayoutAccount() {
     const renderComponent = () => {
         switch (router.pathname) {
             case '/dashboard':
-                return <TickPlacementBars />;
+                return <DashboardPage />;
             case '/user-management':
                 return <UserManagementPage />;
             case '/seat-list':

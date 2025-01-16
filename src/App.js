@@ -46,6 +46,7 @@ function App() {
                   {/* <Route path='user-management' element={<UserManagementPage />} />
                   <Route path='*' element={<HomePage />}/> */}
                 </Route>
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
               {/* <Route path="user/reservation/payment-complete" element={<PaymentCompletePage />} /> */}
               {/* Public Routes */}
