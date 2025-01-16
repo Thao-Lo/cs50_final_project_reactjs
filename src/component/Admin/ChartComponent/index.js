@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -7,6 +6,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
+import { retrieveReservationsCountsPerSeat } from '../../../services/adminManagementService';
+import { useEffect, useState } from 'react';
+import { Box } from '@mui/material';
 
 
 function TickParamsSelector({
@@ -58,28 +60,52 @@ function TickParamsSelector({
         </Stack>
     );
 }
-
-const chartSetting = {
-    yAxis: [
-        {
-            label: 'Number of Booking (Thao)',
-        },
-    ],
-    series: [{ dataKey: 'seoul', label: 'Booking value', valueFormatter }],
-    height: 500,
-    sx: {
-        [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
-            transform: 'translateX(-10px)',
-        },
-    },
-};
-
+//hover on each chart
+function valueFormatter(value) {
+    return `${value} times`;
+}
 export default function TickPlacementBars() {
-    const [tickPlacement, setTickPlacement] = React.useState('middle');
-    const [tickLabelPlacement, setTickLabelPlacement] = React.useState('middle');
+    const [tickPlacement, setTickPlacement] = useState('middle');
+    const [tickLabelPlacement, setTickLabelPlacement] = useState('middle');
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const fetchReservationsCountsPerSeat = async () => {
+        const result = await retrieveReservationsCountsPerSeat();
+        if (result.error) {
+            setError(result.message);
+            return;
+        }
+        setData(result.seatDataset);
+        console.log(result.seatDataset);
+        setIsLoading(false);
+        setError(null);
+    }
+    useEffect(() => {
+        fetchReservationsCountsPerSeat();
+    }, [])
+
+    if (error) return <Box sx={{ color: 'red', textAlign: 'center', padding: '20px' }}>{error}</Box>
+    if (isLoading) return <Box sx={{ textAlign: 'center', padding: '20px' }}>Loading Data...</Box>
+
+    const chartSetting = {
+        yAxis: [
+            {
+                label: 'Number of Booking ',
+            },
+        ],
+        series: [{ dataKey: 'reservationCount', label: 'Booking value', valueFormatter }],
+        height: 500,
+        sx: {
+            [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
+                transform: 'translateX(-10px)',
+            },
+        },
+    };
 
     return (
-        <div style={{ width: 700 }}>
+        <div style={{ width: 780 }}>
             <TickParamsSelector
                 tickPlacement={tickPlacement}
                 tickLabelPlacement={tickLabelPlacement}
@@ -87,103 +113,12 @@ export default function TickPlacementBars() {
                 setTickLabelPlacement={setTickLabelPlacement}
             />
             <BarChart
-                dataset={datasets}
+                dataset={data}
                 xAxis={[
-                    { scaleType: 'band', dataKey: 'month', tickPlacement, tickLabelPlacement },
+                    { scaleType: 'band', dataKey: 'seatName', tickPlacement, tickLabelPlacement },
                 ]}
                 {...chartSetting}
             />
         </div>
     );
-}
-const datasets = [
-    {
-        london: 59,
-        paris: 57,
-        newYork: 86,
-        seoul: 25,
-        month: 'Jan',
-    },
-    {
-        london: 50,
-        paris: 52,
-        newYork: 78,
-        seoul: 28,
-        month: 'Feb',
-    },
-    {
-        london: 47,
-        paris: 53,
-        newYork: 106,
-        seoul: 41,
-        month: 'Mar',
-    },
-    {
-        london: 54,
-        paris: 56,
-        newYork: 92,
-        seoul: 73,
-        month: 'Apr',
-    },
-    {
-        london: 57,
-        paris: 69,
-        newYork: 92,
-        seoul: 99,
-        month: 'May',
-    },
-    {
-        london: 60,
-        paris: 63,
-        newYork: 103,
-        seoul: 144,
-        month: 'June',
-    },
-    {
-        london: 59,
-        paris: 60,
-        newYork: 105,
-        seoul: 319,
-        month: 'July',
-    },
-    {
-        london: 65,
-        paris: 60,
-        newYork: 106,
-        seoul: 249,
-        month: 'Aug',
-    },
-    {
-        london: 51,
-        paris: 51,
-        newYork: 95,
-        seoul: 131,
-        month: 'Sept',
-    },
-    {
-        london: 60,
-        paris: 65,
-        newYork: 97,
-        seoul: 55,
-        month: 'Oct',
-    },
-    {
-        london: 67,
-        paris: 64,
-        newYork: 76,
-        seoul: 48,
-        month: 'Nov',
-    },
-    {
-        london: 61,
-        paris: 70,
-        newYork: 103,
-        seoul: 25,
-        month: 'Dec',
-    },
-];
-
-//hover on each chart
-function valueFormatter(value) {
-    return `${value}mm`;
 }

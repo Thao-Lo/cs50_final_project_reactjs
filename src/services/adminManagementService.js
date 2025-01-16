@@ -15,6 +15,16 @@ export const retrieveSeatList = async (page, size) => {
     }
 }
 
+export const retrieveReservationsCountsPerSeat = async () => {
+    try {
+        const res = await axiosInstance.get(`/admin/seats/reservation-counts`);
+        return res.data;
+
+    } catch (error) {
+        return handleError(error, "React: Cannot fetch Reservation Counts list.")
+    }
+}
+
 export const retrieveDateList = async (page, size) => {
     try {
         const res = await axiosInstance.get(`/admin/dates`, {
