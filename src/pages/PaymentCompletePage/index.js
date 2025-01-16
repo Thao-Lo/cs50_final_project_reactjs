@@ -26,8 +26,8 @@ function PaymentCompletePage() {
     }, [clientSecret, setClientSecret])
 
 
+    // Call API to send confirmation email if payment successfully, or send error message
     const fetchConfirmReservation = async (retryCount = 3, retryDelay = 2000) => {
-
         const storedSessionId = sessionStorage.getItem('sessionId');
         console.log("complete storedSessionId" + storedSessionId);
         if (!storedSessionId || !paymentIntentId) {
@@ -44,10 +44,11 @@ function PaymentCompletePage() {
                     setIsLoading(false);
                     return;
                 }
+                // increment after wait 2 secs, then call API again
                 await new Promise(resolve => setTimeout(resolve, retryDelay))
 
-
             } else {
+                //clear all the paymentIntent in Reservation Context after payment successfully
                 console.log(result);
                 setMessage(result.message)
                 setError('')

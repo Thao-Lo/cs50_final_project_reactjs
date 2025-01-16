@@ -4,7 +4,8 @@ import { resendValidationCode, verifyEmail } from "../../services/authService";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function EmailVerificationPage() {
-    const location = useLocation();
+     //get email from URL
+    const location = useLocation();   
     const querySearch = new URLSearchParams(location.search);
     const email = querySearch.get('email');
 
@@ -23,6 +24,7 @@ function EmailVerificationPage() {
     }
     const validateInput = (e) => {
         const { name, value } = e.target;
+        // use regex to validate code pattern
         if (name === 'code') {
             if (!/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(value)) {
                 setCodeError('Email is not valid');
@@ -31,6 +33,7 @@ function EmailVerificationPage() {
             }
         }
     }
+    //submit code
     const handleSubmit = async (e) => {
         e.preventDefault();
         const result = await verifyEmail(email, code)
@@ -43,6 +46,7 @@ function EmailVerificationPage() {
 
     }
 
+    // when user need to reset code, resend to their email
     const handleResendCode = async () => {
         if (!email) {
             setEmailError('Please enter valid email')
@@ -50,11 +54,13 @@ function EmailVerificationPage() {
         } else {
             setEmailError('')
         }
+        //call API to resend code
         const result = await resendValidationCode(email)
         if (result.error) {
             setError(result.message)
         }
     }
+    // to hide enter code form, and show register successfully message, navigate to /login after 5 secs
     useEffect(() => {
         let timer;
         if (isValid) {
@@ -82,6 +88,7 @@ function EmailVerificationPage() {
                     <Typography sx={{mb:1}}> Please check your email to get verification code: </Typography>
                     <Typography> Email: {email}</Typography>                 
                 </Box>
+                {/* SHOW ENTER CODE FORM */}
                 {!isValid && (
                     <>
                         <Box component="form" onSubmit={handleSubmit}
@@ -118,6 +125,7 @@ function EmailVerificationPage() {
                         <Button variant="text" onClick={handleResendCode}>resend code</Button>
                     </>
                 )}
+                  {/* SHOW SUCCESSFUL MESSAGE */}
                 {isValid && (
                     <Typography sx={{ p: 3, color: 'green', fontSize: '1.25rem' }}>{message}</Typography>
                 )}

@@ -21,8 +21,10 @@ function BookingPage() {
     const { state: { slot, sessionId }, dispatch } = useReservation();
     const { state: { isAuthenticated } } = useUser();
     const { setClientSecret, setPaymentIntentId } = useStripeContext();
+    // set default value 
     const [bookingValues, setBookingValues] = useState({
-        capacity: '',
+        capacity: 2,
+        // date: null,
         date: dayjs.tz(new Date(), "Australia/Sydney"),
         time: ''
     })
@@ -43,6 +45,7 @@ function BookingPage() {
         setSlots(result.availableSlots)
         setError('');
     }
+    //fetch again if user change their booking options: capacity, date, time
     useEffect(() => {
         fetchSlot();
     }, [bookingValues.capacity, bookingValues.date, bookingValues.time])
@@ -53,13 +56,13 @@ function BookingPage() {
         const result = await createReservation(slot);
         if (result.error) {
             console.log(result.message);
-            // const errorMessage = result.message;
             dispatch({ type: RESERVATION_ACTION.SET_ERROR, payload: { errorMessage: result.message } })
             return;
         }
         console.log("result", result);
         console.log("TTL: " + result.remainingTime);
-      
+
+        // created reservation, then change it, will reset the stripeContext and sessionId, clear Redis
         if (isAuthenticated) {
             //clean up redis
             if (sessionId) {
@@ -70,9 +73,10 @@ function BookingPage() {
             }
             // dispatch({ type: RESERVATION_ACTION.DECREMENT_COUNTDOWN, payload: { countdown: result.remainingTime - 1 } });
             dispatch({ type: RESERVATION_ACTION.SET_SESSION_ID, payload: { sessionId: result.sessionId } });
-          
+
             navigate('/user/reservation')
         } else {
+            // if user not login, sessionId will be store in sessionStorage 1st, the old unused sessionId will be removed
             const existingSessionId = sessionStorage.getItem('sessionId');
             if (existingSessionId) {
                 //clean up Redis               
@@ -85,7 +89,8 @@ function BookingPage() {
             navigate('/login')
         }
     }
-   
+
+    //when user change their booking 
     const handleDeleteRedisForNonProcessingBooking = async (sessionId) => {
         const res = await deleteRedisForNonProcessingBooking(sessionId)
         if (res.error) {
@@ -123,6 +128,7 @@ function BookingPage() {
         setSelectedSlot(slot)
     }
 
+    //to group slots by dates, acc[slot.date]: is a key with an empty array "11-2-25" : [] 
     const groupSlotsByDate = (slots) => {
         return slots.reduce((acc, slot) => {
             if (!acc[slot.date]) {
@@ -132,11 +138,14 @@ function BookingPage() {
             return acc;
         }, {})
     }
+    //Object with keys and array values
     const groupSlots = groupSlotsByDate(slots)
+
 
 
     const slotList = (slots.length > 0) ?
         (Object.keys(groupSlots).map((date) => (
+            //get key to display date
             <Box key={date}>
                 <Box sx={{ m: 1, fontWeight: 'bold', textDecoration: 'underline' }}>{date}</Box>
                 <Box sx={{
@@ -158,7 +167,7 @@ function BookingPage() {
                         backgroundColor: "#555", // Color on hover
                     }
                 }}>
-                    {
+                    {  //get value [] to display each slot
                         groupSlots[date].map((slot) => (
                             <Box key={slot.id}>
                                 <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />
