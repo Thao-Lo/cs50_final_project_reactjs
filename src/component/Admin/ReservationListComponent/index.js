@@ -77,7 +77,7 @@ function ReservationListComponent() {
             currentPage: result.currentPage,
             reservationsPerPage: result.usersPerPage,
             totalPages: result.totalPages,
-            totalRows: result.totalReservations
+            totalRows: result.totalRows
         })
         setIsLoading(false)
     }

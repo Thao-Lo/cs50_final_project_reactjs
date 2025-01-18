@@ -37,7 +37,7 @@ function DateListComponent () {
             currentPage: result.currentPage,
             datesPerPage: result.datesPerPage,
             totalPages: result.totalPages,
-            totalRows: result.totalDates
+            totalRows: result.totalRows
         })
         setIsLoading(false)
     }

@@ -37,7 +37,7 @@ function SeatListComponent() {
             currentPage: result.currentPage,
             seatsPerPage: result.seatsPerPage,
             totalPages: result.totalPages,
-            totalRows: result.totalSeats
+            totalRows: result.totalRows
         })
         setIsLoading(false)
     }

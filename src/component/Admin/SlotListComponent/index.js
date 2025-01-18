@@ -42,7 +42,7 @@ function SlotListComponent() {
             currentPage: result.currentPage,
             slotsPerPage: result.slotsPerPage,
             totalPages: result.totalPages,
-            totalRows: result.totalSlots
+            totalRows: result.totalRows
         })
         setIsLoading(false)
     }
