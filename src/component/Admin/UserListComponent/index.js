@@ -20,7 +20,7 @@ function UserListComponent() {
     //flag to show or hide the updateValueMessage
     const [showMessage, setShowMessage] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
+    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
     //Data grid columns - key, header name and size 
     const columns = [
@@ -108,7 +108,7 @@ function UserListComponent() {
                             rowCount={usersData.totalRows}
                             pagination
                             paginationMode="server"
-                            pageSizeOptions={[5, 10]}
+                            pageSizeOptions={[10, 15]}
                             onPaginationModelChange={handlePaginationChange}
                             paginationModel={paginationModel}
 

@@ -10,7 +10,7 @@ function UserReservationList() {
     const { state: { user } } = useUser();
     const { state: { error }, dispatch } = useReservation();
     const [reservationList, setReservationList] = useState([]);
-    const [paginationModel, serPaginationModel] = useState({ page: 0, pageSize: 5 })
+    const [paginationModel, serPaginationModel] = useState({ page: 0, pageSize: 10 })
     const [totalRows, setTotalRows] = useState(0);
 
     const columns = [
@@ -64,14 +64,14 @@ function UserReservationList() {
             <Box>
                 <Typography variant="h6" sx={{ pl: 1 }}>Your Reservation:</Typography>
                 <TableContainer sx={{ height: 900, width: '100%' }}>
-                    <Paper sx={{ height: 400, maxWidth: 1000 }}>
+                    <Paper sx={{ height: 630, maxWidth: 1000 }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}
                             rowCount={totalRows}
                             pagination
                             paginationMode="server"
-                            pageSizeOptions={[5, 10]}
+                            pageSizeOptions={[10, 15]}
                             onPaginationModelChange={handlePaginationChange}
                             paginationModel={paginationModel}
                             checkboxSelection
