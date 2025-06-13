@@ -35,7 +35,6 @@ function HomePage() {
     if (error) {
         return <Typography variant="subtitle1">{error}...</Typography>;
     }
-
     return (
         <>
             <Container maxWidth="lg">
