@@ -16,6 +16,8 @@ import UserPage from './pages/UserPage';
 import RoleGuard from './component/RoleGuard';
 import DashboardLayoutAccount from './pages/Admin/DashboardLayoutAccount';
 import UserManagementPage from './pages/Admin/UserManagementPage';
+import OAuth2SuccessPage from './pages/OAuth2SucessPage';
+import OAuth2FailurePage from './pages/OAuth2FailurePage';
 
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/verify-email" element={<EmailVerificationPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/oauth2/success" element={<OAuth2SuccessPage />} />
+                <Route path="/oauth2/error" element={<OAuth2FailurePage />} />
               </Route>
 
               {/* User Routes*/}
