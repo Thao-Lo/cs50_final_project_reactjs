@@ -1,7 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 
-export const API_URL = 'http://localhost:8080/api/v1'
+// export const API_URL = 'http://52.63.144.98:8080/api/v1'
+export const API_URL = process.env.REACT_APP_API_URL;
+// export const API_URL = 'http://localhost:8080/api/v1'                 
 
 const axiosInstance = axios.create({
     baseURL: API_URL, //standard key
@@ -83,11 +85,24 @@ axiosInstance.interceptors.response.use(
 export const handleError = (error, defaultMessage) => {
     if (error.response) {
         //server error
-        const errorMessage = error.response.data.error || defaultMessage
-        return { error: true, message: errorMessage }
+        const data = error.response.data
+        const errorMessage = data?.message || defaultMessage
+        const errorCode = data?.code || 'UNKNOWN'
+        return { 
+            error: true, 
+            message: errorMessage, 
+            code: errorCode,
+            status: error.response.status,
+            path: data?.path
+        }
     } else {
         //client error
-        return { error: true, message: error.message };
+        return {
+            error: true,
+            message: error.message || defaultMessage,
+            code: 'NETWORK_ERROR',
+            status: 0
+            };
     }
 }
 
