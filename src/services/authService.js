@@ -43,6 +43,20 @@ export const register = async (data) => {
     }
 }
 
+export const getOAuth2LoginDetails = async (oauth2sessionId) => {
+    try{
+        const res = await axiosInstance.post(`/auth/token`, {sessionId: oauth2sessionId})
+        const result = res.data;
+        if(result.accessToken){
+            Cookies.set('accessToken', result.accessToken, {expires: 1/24})
+            Cookies.set('refreshToken', result.refreshToken, {expires: 7})
+        }
+        return result;
+    }catch (error){
+        return handleError(error, "Failed to retrieve login details via OAuth2.");
+    }
+}
+
 export const verifyEmail = async (email, code) => {
     try {
         const res = await axiosInstance.post(`/verify-email?email=${email}&code=${code}`)
