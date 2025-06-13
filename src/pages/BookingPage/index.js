@@ -25,7 +25,7 @@ function BookingPage() {
     const [bookingValues, setBookingValues] = useState({
         capacity: 2,
         // date: null,
-        date: dayjs.tz(new Date(), "Australia/Sydney"),
+        date: dayjs.tz(new Date()),
         time: ''
     })
     const navigate = useNavigate();
@@ -112,7 +112,7 @@ function BookingPage() {
     const handleDateChange = (newDate) => {
         setBookingValues((prev) => ({
             ...prev,
-            date: newDate ? dayjs.tz(newDate, "Australia/Sydney") : null
+            date: newDate ? dayjs.tz(newDate) : null
         }))
     }
     //Dialog
