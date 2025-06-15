@@ -31,14 +31,16 @@ function RegisterPage() {
         } else {
             navigate(`/verify-email?email=${authentication.email}`)
         }
-
     }
 
     return (
         <Container maxWidth="lg">
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', height: '90vh' }}>
                 <RegisterForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
-                <Typography component={NavLink} to={'/login'}>Already have account? Click to Login</Typography>
+                <Box sx={{ display: 'flex', gap: '3px', marginBottom: '16px' }}>
+                    <Typography>Already have account? </Typography>
+                    <Typography component={NavLink} to={'/login'}>Sign In</Typography>
+                </Box>
             </Box>
         </Container>
     )
