@@ -2,18 +2,23 @@ import { Box, Card, CardActionArea, CardContent, Typography } from "@mui/materia
 
 function SlotComponent({ slot, handleSlotClick }) {
 
+    const formattedSlotTime = slot.time.slice(0,5);
+
     return (
         <Box sx={{ mb: 2 }}>
-            <Card sx={{ width: '8rem' }}>
-                <CardActionArea onClick={() => handleSlotClick(slot)}>
-                    <CardContent sx={{ padding: '0.5rem' }}>
-                        <Typography gutterBottom variant="body" component="div" sx={{ textAlign: 'center' }}>
-                            {slot.time}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', overflow: 'hidden', textOverflow: "ellipsis" }}>
-                            {slot.tableName} - Dinning
-                        </Typography>
-
+            <Card sx={{ width: '8rem'}}>
+                <CardActionArea  onClick={() => handleSlotClick(slot)}
+                sx={{ 
+                    backgroundColor: '#fafafa',
+                    '&:hover': {
+                      backgroundColor: 'action.selectedHover',
+                    },
+                  }}
+                    >
+                    <CardContent sx={{ padding: '0.3rem', display:'flex', justifyContent:'center', alignItems:'center' }}>
+                        <Typography variant="h6" component="div" sx={{ textAlign: 'center' }}>
+                            {formattedSlotTime}
+                        </Typography>   
                     </CardContent>
                 </CardActionArea>
             </Card>
