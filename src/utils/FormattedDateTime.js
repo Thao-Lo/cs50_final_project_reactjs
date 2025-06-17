@@ -33,3 +33,13 @@ export const calculateDateAndTime = (date, time) => {
     const rowTime = (hours * 3600 + minutes * 60) * 1000;
     return rowDate + rowTime;
 }
+
+//2025-6-17 -> Tuesday, June 17
+export const formatDateDisplay = (dateStr) => {
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('en-US', {
+        weekday: 'long',  //short: Tue vs Tuesday
+        month: 'long', // short: Jun, numeric: 06
+        day: 'numeric' 
+    }).format(date);
+}
