@@ -1,10 +1,11 @@
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Divider, Typography } from "@mui/material";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import LoginForm from "../../component/LoginForm";
 import { RESERVATION_ACTION, useReservation } from "../../hooks/ReservationContext";
 import { USER_ACTION, useUser } from "../../hooks/UserContext";
 import { login } from "../../services/authService";
+import GoogleIcon from '../../static/images/google-logo.png'
 
 function LoginPage() {
     const { state: { error }, dispatch } = useUser();
@@ -28,6 +29,7 @@ function LoginPage() {
         }))
 
     }
+    
     // when user submit login form
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -74,11 +76,43 @@ function LoginPage() {
                     (
                         <>
                             <LoginForm authentication={authentication} handleInputChange={handleInputChange} handleSubmit={handleSubmit} error={error} />
-                            <Typography component={NavLink} to={'/register'}>Not Register yet? Click here</Typography>
+                            <Box sx={{ display: 'flex', gap: '3px', marginBottom: '16px' }}>
+                                <Typography>Dont have an account? </Typography>
+                                <Typography component={NavLink} to={'/register'}>Sign up</Typography>
+                            </Box>
+                            <Box sx={{ width: '20rem' }}>
+                                <Divider>OR</Divider>
+                            </Box>
+                            
+                            <Button type="submit" variant="outlined" 
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-evenly',
+                                    width: '20rem',
+                                    gap: '3px',
+                                    m: 2,
+                                    '& .MuiTextField-root': { width: '100%' }
+                                }}
+                                href={process.env.REACT_APP_OAUTH2_URL}>
+                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Box component='img'
+                                        sx={{ width: { xs: 30, sm: 30 }, height: { xs: 30, sm: 30 }, flex: 1 }}
+                                        alt='google-logo-icon'
+                                        src={GoogleIcon}
+                                    />
+
+                                    <Box sx={{ flex:9, justifyContent: 'center', alignItems: 'center', textAlign:'center' }}>
+                                        Login with Google
+                                    </Box>
+
+                                </Box>
+
+                            </Button>
+
                         </>
                     )}
             </Box>
-        </Container>
+        </Container >
 
     )
 }
