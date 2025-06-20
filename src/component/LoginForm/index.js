@@ -110,8 +110,8 @@ function LoginForm({ authentication, handleInputChange, handleSubmit, error }) {
             />          
             <Box>{!!error? error : ' '}</Box>
             <Box sx={{ mt: 2 }}>
-                <Button variant="contained" type="submit" sx={{ width: '100%' }}>
-                    Login
+                <Button variant="contained" type="submit" sx={{ width: '100%', height:'42px' }}>
+                    Continue
                 </Button>
             </Box>           
         </Box>
