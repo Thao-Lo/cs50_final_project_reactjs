@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid2';
 
 dayjs.extend(utc);
 dayjs.extend(timezone)
-const availableTimes = ['17:30:00', '18:30:00', '19:30:00', '20:30:00']
+const availableTimes = ['Anytime' ,'17:30:00', '18:30:00', '19:30:00', '20:30:00']
 const capacity = [1, 2, 3, 4, 5, 6]
 
 function BookingComponent({ bookingValues, handleInputChange, handleDateChange }) {
