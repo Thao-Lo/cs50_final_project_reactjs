@@ -1,4 +1,4 @@
-import { Box, Container, Paper } from "@mui/material";
+import { Box, Container, List, ListItem, ListItemText, Paper } from "@mui/material";
 import dayjs, { utc } from "dayjs";
 import timezone from 'dayjs/plugin/timezone';
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { useUser } from "../../hooks/UserContext";
 import { getSlots } from "../../services/bookingService";
 import { createReservation, deleteRedisForNonProcessingBooking } from "../../services/reservationService";
 import { useStripeContext } from "../../stripe/StripeContext";
+import { formatDateDisplay } from "../../utils/FormattedDateTime";
 
 //https://day.js.org/en/
 dayjs.extend(utc);
@@ -35,8 +36,10 @@ function BookingPage() {
     const [open, setOpen] = useState(false);
 
     //fetch slot - bookingService
-    const fetchSlot = async () => {
-        const result = await getSlots(bookingValues.capacity, bookingValues.date, bookingValues.time);
+    const fetchSlot = async () => {       
+        const time = bookingValues.time === "Anytime" ? '' : bookingValues.time;
+
+        const result = await getSlots(bookingValues.capacity, bookingValues.date, time);
         if (result.error) {
             setSlots([])
             setError(result.message)
@@ -138,44 +141,68 @@ function BookingPage() {
             return acc;
         }, {})
     }
+    console.log("Slots: ", slots)
     //Object with keys and array values
     const groupSlots = groupSlotsByDate(slots)
+    console.log("Group slote: ", groupSlots)
 
-
+    const groupSlotsByDateAndTableName = (slots) => {
+        return slots.reduce((acc, slot) => {
+            if (!acc[slot.date]) {
+                acc[slot.date] = {}
+            }
+            if (!acc[slot.date][slot.tableName]) {
+                acc[slot.date][slot.tableName] = []
+            }
+            acc[slot.date][slot.tableName].push(slot)
+            return acc;
+        }, {})
+    }
+    const groupSlotsByName = groupSlotsByDateAndTableName(slots);
+    console.log("Slots by table name: ", groupSlotsByName)
 
     const slotList = (slots.length > 0) ?
-        (Object.keys(groupSlots).map((date) => (
+        (Object.keys(groupSlotsByName).map((date) => (
             //get key to display date
             <Box key={date}>
-                <Box sx={{ m: 1, fontWeight: 'bold', textDecoration: 'underline' }}>{date}</Box>
-                <Box sx={{
-                    display: 'flex', gap: '0.5rem',
-                    overflow: 'auto',
-                    whiteSpace: "nowrap",
-                    "&::-webkit-scrollbar": {
-                        width: '1rem',
-                        height: '0.5rem'
-                    },
-                    "&::-webkit-scrollbar-track": {
-                        backgroundColor: "#f1f1f1", // Background of the scrollbar track
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                        backgroundColor: "#888", // Color of the scrollbar thumb
-                        borderRadius: "10px",    // Rounded corners
-                    },
-                    "&::-webkit-scrollbar-thumb:hover": {
-                        backgroundColor: "#555", // Color on hover
-                    }
-                }}>
-                    {  //get value [] to display each slot
-                        groupSlots[date].map((slot) => (
-                            <Box key={slot.id}>
-                                <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />
+                <Box sx={{ m: 1, fontWeight: 600, fontSize: '1.3rem' }}>{formatDateDisplay(date)}</Box>
+                <List>
+                    {Object.entries(groupSlotsByName[date]).map(([tableName, slotArray], index) => (
+                        <ListItem key={index} 
+                        sx={{display:'flex', flexDirection:'column', alignItems:'flex-start',
+                              p:'0',pl:{xs:'0.5rem', sm:'1rem'}, pb: {xs:'0.5rem', sm:'0'}}}>
+                            <Box sx={{ m: 1, fontWeight: 600, textAlign:'start' }}>{tableName} - Dining</Box>
+                            <Box sx={{
+                                display: 'flex', gap: '0.5rem',
+                                overflow: 'auto',
+                                width: '100%',
+                                whiteSpace: "nowrap",
+                                "&::-webkit-scrollbar": {
+                                    width: '1rem',
+                                    height: '0.4rem'
+                                },
+                                "&::-webkit-scrollbar-track": {
+                                    backgroundColor: "#f1f1f1", // Background of the scrollbar track
+                                },
+                                "&::-webkit-scrollbar-thumb": {
+                                    backgroundColor: "#bdbdbd", // Color of the scrollbar thumb
+                                    borderRadius: "10px",    // Rounded corners
+                                },
+                                "&::-webkit-scrollbar-thumb:hover": {
+                                    backgroundColor: "#555", // Color on hover
+                                }
+                            }}>
+                                {  //get value [] to display each slot
+                                   slotArray.map((slot) => (
+                                        <Box key={slot.id}>
+                                            <SlotComponent key={slot.id} slot={slot} handleSlotClick={handleSlotClick} />
+                                        </Box>
+                                    ))
+                                }
                             </Box>
-                        ))
-                    }
-                </Box>
-
+                        </ListItem>
+                    ))}
+                </List>   
             </Box>
         ))) : (error ? <Box>{error}</Box> : <Box>No result</Box>)
 
